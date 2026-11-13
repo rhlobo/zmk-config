@@ -1,40 +1,44 @@
-_TAG="${1:-default}"
-echo "ZMK_PATH: '${ZMK_PATH}'"
-echo "WORKPACE_PATH: '${WORKPACE_PATH}'"
-echo "BUILD_SUBFOLDER: '${BUILD_SUBFOLDER}'"
+#!/usr/bin/env bash
+# Build firmware for both Corne halves inside the devcontainer.
+#
+# Usage: bin/build-corne [tag]
+#
+# Expects ZMK_PATH, WORKSPACE_PATH and BUILD_SUBFOLDER to be set (the devcontainer does this).
+# Output: $WORKSPACE_PATH/$BUILD_SUBFOLDER/nice_nano_v2-corne-{left,right}-zmk-<tag>.uf2
+set -euo pipefail
 
+: "${ZMK_PATH:?ZMK_PATH is not set}"
+: "${WORKSPACE_PATH:?WORKSPACE_PATH is not set}"
+: "${BUILD_SUBFOLDER:?BUILD_SUBFOLDER is not set}"
 
-test -d build && rm -Rf build
-mkdir -p "${WORKPACE_PATH}/${BUILD_SUBFOLDER}"
+TAG="${1:-$(date +%Y-%m-%d)}"
+OUT_DIR="${WORKSPACE_PATH}/${BUILD_SUBFOLDER}"
 
+echo "ZMK_PATH:       ${ZMK_PATH}"
+echo "WORKSPACE_PATH: ${WORKSPACE_PATH}"
+echo "OUT_DIR:        ${OUT_DIR}"
+echo "TAG:            ${TAG}"
 
-cd $ZMK_PATH
+rm -rf "${OUT_DIR}"
+mkdir -p "${OUT_DIR}"
 
+cd "${ZMK_PATH}"
 
-build-firmware(){
-    _NAME="$1"
-    _BOARD="$2"
-    _SHIELD="$3"
-    _SIDE="$4"
-
-    FW_FILE="${WORKPACE_PATH}/${BUILD_SUBFOLDER}/${_BOARD}-${_NAME}-${_SIDE}-zmk-${_TAG}.uf2"
-    rm -Rf "${FW_FILE}"
+build-firmware() {
+    local name="$1" board="$2" shield="$3" side="$4"
+    local fw_file="${OUT_DIR}/${board}-${name}-${side}-zmk-${TAG}.uf2"
 
     west build \
         -s app \
         --pristine \
-        -d "build/${_SIDE}" \
-        --board="${_BOARD}" \
-        -- -DSHIELD="${_SHIELD}" \
-        -DZMK_CONFIG=$WORKPACE_PATH/config && {
-            cp "build/${_SIDE}/zephyr/zmk.uf2" "${FW_FILE}"
-            echo -e "SUCCESSFULLY build '${FW_FILE}'"
-        } || {
-            echo "BUILD FAILED"
-            exit 1
-        }
-}
+        -d "build/${side}" \
+        --board="${board}" \
+        -- -DSHIELD="${shield}" \
+        -DZMK_CONFIG="${WORKSPACE_PATH}/config"
 
+    cp "build/${side}/zephyr/zmk.uf2" "${fw_file}"
+    echo "Built ${fw_file}"
+}
 
 build-firmware "corne" "nice_nano_v2" "corne_left nice_view_adapter nice_view" "left"
 build-firmware "corne" "nice_nano_v2" "corne_right nice_view_adapter nice_view" "right"

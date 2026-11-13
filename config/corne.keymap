@@ -2,8 +2,8 @@
 #include <dt-bindings/zmk/bt.h>         // Bluetooth Command Defines
 #include <dt-bindings/zmk/keys.h>       // Keycode Defines
 #include <dt-bindings/zmk/ext_power.h>  // Power Management Behaviors
-#include "mouse_old.dtsi"               // Mouse Emulation Utilities
-#include "combos.dtsi"                   // Combo Key Utilities
+#include "mouse.dtsi"                   // Mouse emulation tuning and movement/scroll defines
+#include "key_positions.dtsi"           // Named key positions used by combos
 
 
 // REFER TO LAYERS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,6 @@
 #define LSYM 2
 #define LNUM 3
 #define LSYS 4
-// #define LPPT 5
 
 
 / {
@@ -56,12 +55,6 @@
             key-positions = <KL43 KR43>;
             bindings = <&to LSYS>;
         };
-        // // Sticks PPT PRESENTATION LAYER ON
-        // combo_PPT {
-        //     timeout-ms = <75>;
-        //     key-positions = <KL43 KL15>;
-        //     bindings = <&to LPPT>;
-        // };
 
         // MOUSE COMBOS ##############################################################################################################
         combo_MOUSECLICK {
@@ -221,16 +214,6 @@
             bindings = <&macro_tap &kp ESC &kp COLON &kp Q &kp EXCLAMATION &kp ENTER>;
         };
 
-        // Macro: ESC :wq ENTER
-        nvim_savequit: nvim_savequit {
-            label = "nvim_savequit";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            wait-ms = <30>;
-            tap-ms = <40>;
-            bindings = <&macro_tap &kp ESC &kp COLON &kp W &kp Q &kp ENTER>;
-        };
-
         // Macro: RALT+, c (CCEDIL in xpsarch keymap workaround)
         ccedil_xpsarch_macro: ccedil_xpsarch_macro {
             label = "ccedil_xpsarch_macro";
@@ -275,7 +258,7 @@
         nav_layer {
             label = "Move";
             bindings = <
-&trans    &kp LG(S) &mwh SCROLL_LEFT &mwh SCROLL_DOWN &mwh SCROLL_UP &mwh SCROLL_RIGHT           &kp HOME    &kp PG_DN    &kp PG_UP   &kp END         &kp K_CMENU      &trans
+&trans    &kp LG(S) &msc SCROLL_LEFT &msc SCROLL_DOWN &msc SCROLL_UP &msc SCROLL_RIGHT           &kp HOME    &kp PG_DN    &kp PG_UP   &kp END         &kp K_CMENU      &trans
 &trans    &kp LA(TAB) &trans      &trans      &trans       &trans            &kp LEFT    &kp DOWN       &kp UP    &kp RIGHT       &kp ENTER        &trans
 &trans    &kp LC(Z)   &kp LC(X)   &kp LC(C)   &kp LC(V)    &kp LC(Y)     &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &mkp RCLK      &trans
                                     &trans      &trans       &trans           &trans      &trans      &to LDEF
@@ -331,22 +314,5 @@
                                    &trans       &trans      &trans            &trans     &trans       &to LDEF
             >;
         };
-
-// //       -------------------------------------------------------------     -------------------------------------------------------------
-// //       |           |           |           |           |           |     |           |           |           |           |           |
-// //       |           |           |           |           |           |     |           |           |           |           |           |
-// //       |   aUNDO   |  aCLEAR   |  aTOOGLE  |           |   aREDO   |     |           |           |           |           |           |
-// //       ------------------------|███████████|           |           |     |           |           |           |------------------------
-// //                               -------------------------------------     -------------------------------------
-//         presentation_layer {
-//             label = "Present";
-//             bindings = <
-// &trans      &trans      &trans      &trans       &trans       &trans          &trans      &trans       &trans      &trans      &trans     &trans
-// &trans      &trans      &trans      &trans       &trans       &trans          &trans      &trans       &trans      &trans      &trans     &trans
-// &trans      &kp F8     &kp LS(F9)   &kp F9       &trans       &kp LS(F8)      &trans      &trans       &trans      &trans      &trans     &trans
-//                                     &trans       &trans       &trans          &trans      &trans       &to LDEF
-//             >;
-//         };
-
     };
 };

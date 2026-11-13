@@ -5,28 +5,28 @@
     "args": {
       "ZMK_URL": "https://github.com/urob/zmk.git",
       "ZMK_BRANCH": "main",
-      "ZMK_PATH": "/zmk"
+      "ZMK_PATH": "/zmk",
       // "ZMK_URL": "https://github.com/zmkfirmware/zmk.git",
       // "ZMK_BRANCH": "main",
-      // "ZMK_PATH": "/zmk"
+      "USERNAME": "dev",
+      "USER_UID": "${localEnv:UID:1000}",
+      "USER_GID": "${localEnv:GID:1000}"
     }
   },
+  "remoteUser": "dev",
+  "updateRemoteUserUID": true,
   "runArgs": ["--security-opt", "label=disable"],
-  "updateContentCommand": "cd $ZMK_PATH && git fetch && git reset --hard origin/main",
-  // "updateContentCommand": "cd $ZMK_PATH && git pull",
+  "updateContentCommand": "cd $ZMK_PATH && git fetch && git reset --hard origin/main && west update && west zephyr-export",
   "containerEnv": {
-        "WORKPACE_PATH": "${containerWorkspaceFolder}",
-        "ZMK_PATH": "/zmk",
-        "BUILD_SUBFOLDER": "build"
+    "WORKSPACE_PATH": "${containerWorkspaceFolder}",
+    "ZMK_PATH": "/zmk",
+    "BUILD_SUBFOLDER": "build"
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-vscode.cpptools",
-        "spadin.zmk-tools"
-      ],
+      "extensions": ["ms-vscode.cpptools", "spadin.zmk-tools"],
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+        "terminal.integrated.defaultProfile.linux": "bash"
       }
     }
   }
