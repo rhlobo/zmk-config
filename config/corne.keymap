@@ -15,6 +15,7 @@
 #define LSYM 2
 #define LNUM 3
 #define LSYS 4
+// #define LPPT 5
 
 
 / {
@@ -55,6 +56,12 @@
             key-positions = <KL43 KR43>;
             bindings = <&to LSYS>;
         };
+        // // Sticks PPT PRESENTATION LAYER ON
+        // combo_PPT {
+        //     timeout-ms = <75>;
+        //     key-positions = <KL43 KL15>;
+        //     bindings = <&to LPPT>;
+        // };
 
         // MOUSE COMBOS ##############################################################################################################
         combo_MOUSECLICK {
@@ -80,14 +87,6 @@
             layers = <LSYS>;
         };
 
-        // NVIM save and quit combo
-        combo_NVIM_SAVEQUIT {
-            timeout-ms = <75>;
-            key-positions = <KL15 KL14>;
-            bindings = <&nvim_savequit>;
-            layers = <LNUM>;
-        };
-
         // CCEDIL xpsarch combo (keymap workaround using RALT+, c)
         combo_CCDEIL {
             timeout-ms = <75>;
@@ -106,7 +105,7 @@
             compatible = "zmk,behavior-hold-tap";
             label = "HOMEROW_MODS";
             #binding-cells = <2>;
-            tapping-term-ms = <175>;
+            tapping-term-ms = <200>;
             quick-tap-ms = <100>;
             require-prior-idle-ms = <150>;
             flavor = "tap-preferred";
@@ -118,10 +117,10 @@
             compatible = "zmk,behavior-hold-tap";
             label = "SLOW_HOMEROW_MODS";
             #binding-cells = <2>;
-            tapping-term-ms = <200>;
+            tapping-term-ms = <250>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <250>;
-            flavor = "balanced";
+            flavor = "tap-preferred";
             bindings = <&kp>, <&kp>;
         };
 
@@ -282,21 +281,12 @@
                                     &trans      &trans       &trans           &trans      &trans      &to LDEF
             >;
         };
-//         nav_layer {
-//             label = "Move";
-//             bindings = <
-// &trans      &kp LG(S)   &U_WH_L     &U_WH_D     &U_WH_U      &U_WH_R           &kp HOME    &kp PG_DN    &kp PG_UP   &kp END         &kp K_CMENU      &trans
-// &trans      &kp LA(TAB) &trans      &trans      &trans       &trans            &kp LEFT    &kp DOWN       &kp UP    &kp RIGHT       &kp ENTER        &trans
-// &trans      &kp LC(Z)   &kp LC(X)   &kp LC(C)   &kp LC(V)    &kp LC(Y)     &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &mkp RCLK      &trans
-//                                     &trans      &trans       &trans           &trans      &trans      &to LDEF
-//             >;
-//         };
 
 
 //       -------------------------------------------------------------     -------------------------------------------------------------
 //       |    ` ^    |     !     |     @     |     #     |     $     |     |           |           |           |     *     |    / \    |
 //       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |           |           |     +     |     -     |
-//       |     &     |     %     |     |     |    < >    |    { }    |     |           |           |           |           |           |
+//       |     &     |     %     |     |     |    < >    |    { }    |     |           |           |           |     ;     |     :     |
 //       ------------------------|           |           |           |     |           |███████████|           |------------------------
 //                               -------------------------------------     -------------------------------------
         symbol_layer {
@@ -304,7 +294,7 @@
             bindings = <
 &trans  &cht GRAVE CARET &kp EXCL  &kp AT      &kp HASH    &kp DOLLAR         &trans      &trans      &trans      &kp ASTRK   &cht BSLH KP_SLASH   &trans
 &trans    &kp TILDE     &kp QMARK &kp UNDER &cht RPAR LPAR &cht RBKT LBKT     &trans      &trans      &trans      &kp KP_PLUS &kp MINUS            &trans
-&trans    &kp AMPS      &kp PRCNT  &kp PIPE   &cht GT LT   &cht RBRC LBRC     &trans      &trans      &trans      &trans      &trans               &trans
+&trans    &kp AMPS      &kp PRCNT  &kp PIPE   &cht GT LT   &cht RBRC LBRC     &trans      &trans      &trans      &kp SEMI    &kp COLON            &trans
                                     &trans       &trans       &trans          &trans      &trans      &to LDEF
             >;
         };
@@ -341,6 +331,22 @@
                                    &trans       &trans      &trans            &trans     &trans       &to LDEF
             >;
         };
+
+// //       -------------------------------------------------------------     -------------------------------------------------------------
+// //       |           |           |           |           |           |     |           |           |           |           |           |
+// //       |           |           |           |           |           |     |           |           |           |           |           |
+// //       |   aUNDO   |  aCLEAR   |  aTOOGLE  |           |   aREDO   |     |           |           |           |           |           |
+// //       ------------------------|███████████|           |           |     |           |           |           |------------------------
+// //                               -------------------------------------     -------------------------------------
+//         presentation_layer {
+//             label = "Present";
+//             bindings = <
+// &trans      &trans      &trans      &trans       &trans       &trans          &trans      &trans       &trans      &trans      &trans     &trans
+// &trans      &trans      &trans      &trans       &trans       &trans          &trans      &trans       &trans      &trans      &trans     &trans
+// &trans      &kp F8     &kp LS(F9)   &kp F9       &trans       &kp LS(F8)      &trans      &trans       &trans      &trans      &trans     &trans
+//                                     &trans       &trans       &trans          &trans      &trans       &to LDEF
+//             >;
+//         };
 
     };
 };
