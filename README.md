@@ -40,6 +40,7 @@ with `&to`. Press the right outer thumb key on that layer to return to Base.
 | [`config/corne.keymap`](config/corne.keymap)    | Layers, behaviors, macros, and combo definitions                |
 | [`config/key_positions.dtsi`](config/key_positions.dtsi) | Key-position aliases (`KL11`…`KR43`) used by combos    |
 | [`config/mouse.dtsi`](config/mouse.dtsi)        | Mouse acceleration profiles and movement/scroll defines         |
+| [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
 | [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
 | [`config/west.yml`](config/west.yml)            | West manifest selecting the ZMK fork                            |
 | [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions                          |

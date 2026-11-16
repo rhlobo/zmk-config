@@ -1,0 +1,31 @@
+// Unicode input via the Linux Ctrl+Shift+U sequence (GTK3/Qt style): hold Ctrl+Shift,
+// tap U, release, type the hex code point, then Space. Works in VS Code; not in every
+// terminal, and never on Windows.
+//
+// Use inside the keymap's `macros` node, hex digits comma-separated:
+//     UNICODE_MACRO(u_emdash, N2, N0, N1, N4)   // U+2014
+// and bind with `&u_emdash`.
+
+#define _UKP(k) &kp k
+#define _UNICODE_TAPS_1(a) _UKP(a)
+#define _UNICODE_TAPS_2(a, b) _UKP(a) _UKP(b)
+#define _UNICODE_TAPS_3(a, b, c) _UKP(a) _UKP(b) _UKP(c)
+#define _UNICODE_TAPS_4(a, b, c, d) _UKP(a) _UKP(b) _UKP(c) _UKP(d)
+#define _UNICODE_TAPS_5(a, b, c, d, e) _UKP(a) _UKP(b) _UKP(c) _UKP(d) _UKP(e)
+#define _UNICODE_PICK(_1, _2, _3, _4, _5, NAME, ...) NAME
+#define _UNICODE_TAPS(...) \
+    _UNICODE_PICK(__VA_ARGS__, _UNICODE_TAPS_5, _UNICODE_TAPS_4, _UNICODE_TAPS_3, \
+                  _UNICODE_TAPS_2, _UNICODE_TAPS_1)(__VA_ARGS__)
+
+#define UNICODE_MACRO(name, ...)                                              \
+    name: name {                                                              \
+        compatible = "zmk,behavior-macro";                                    \
+        #binding-cells = <0>;                                                 \
+        wait-ms = <30>;                                                       \
+        tap-ms = <40>;                                                        \
+        bindings = <&macro_press &kp LCTRL &kp LSHFT>,                        \
+                   <&macro_tap &kp U>,                                        \
+                   <&macro_release &kp LCTRL &kp LSHFT>,                      \
+                   <&macro_tap _UNICODE_TAPS(__VA_ARGS__) &kp SPACE>;         \
+    };
+

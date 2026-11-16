@@ -10,16 +10,16 @@ tasks_version: "0.4"
 
 ## Prerequisite
 
-- [ ] **Pick a Unicode input mechanism** — none of the symbols below are plain keycodes, so a macro is needed. On Linux (xps-arch) the usual route is a macro that sends Ctrl+Shift+U, the hex code point, then Space, which works in GTK, Qt, and most terminals. Decide this before adding any symbol. #P1
-  - [ ] Write a reusable `unicode` macro that takes the code point
-  - [ ] Confirm it works in the terminal, browser, and editor you use most
+- [x] **Pick a Unicode input mechanism** — `UNICODE_MACRO()` in `config/unicode.dtsi` sends Ctrl+Shift+U, the hex code point, then Space. Works in VS Code; does not work in the terminal or over RDP to Windows (abandoned for now). (done 2026-11-16) #P1
+  - [x] Write a reusable `unicode` macro that takes the code point (done 2026-11-13)
+  - [x] Confirm it works in the terminal, browser, and editor you use most (done 2026-11-16)
 
 ## Typography
 
 - [ ] **Dashes and dots** — the punctuation you reach for in prose. #P1
-  - [ ] `—` em dash: parenthetical break in a sentence
+  - [x] `—` em dash: parenthetical break in a sentence (done 2026-11-16)
   - [ ] `–` en dash: ranges (10–20) and compound links (suggested addition)
-  - [ ] `·` middle dot: list separator, multiplication in some notations
+  - [x] `·` middle dot: list separator, multiplication in some notations (done 2026-11-16)
   - [ ] `…` ellipsis: trailing-off or omitted text (suggested addition)
 - [ ] **Status marks** — chat, notes, and commit messages. #P2
   - [ ] `✅` check mark: done, approved
