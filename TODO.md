@@ -7,6 +7,8 @@ tasks_version: "0.4"
 > Symbols to add to the keymap, plus the work needed to type them at all. Sections and tasks
 > are ordered by suggested priority, highest first. Each bullet gives the symbol, its name,
 > and its most common meaning. Layout placement is a later decision.
+>
+> Firmware changes not tied to a symbol are listed under [Firmware](#firmware) at the end.
 
 ## Prerequisite
 
@@ -118,3 +120,7 @@ tasks_version: "0.4"
 - [ ] **Legal reference signs** — citing laws and contracts. #P2
   - [ ] `§` section sign: references a section of a law or document
   - [ ] `¶` pilcrow: paragraph mark (suggested addition)
+
+## Firmware
+
+- [ ] **Smooth scrolling** — enable `CONFIG_ZMK_POINTING_SMOOTH_SCROLLING` (high-resolution scroll) in both `config/corne.conf` and `config/eyelash_corne.conf`, then retune the scroll values in `config/mouse.dtsi`, since the option changes the scroll scale. Do it after the Eyelash plan's Phase 3, so the eyelash encoder scrolling is tuned at the same time. Check on the Arch machine; macOS support is weaker. #P3
