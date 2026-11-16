@@ -1,6 +1,8 @@
 // Mouse emulation: acceleration profiles for &mmv / &msc and the MOVE_* / SCROLL_*
 // values used by the Move layer in corne.keymap.
-#include <dt-bindings/zmk/mouse.h>
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1250  // upstream default 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 100   // upstream default 10
+#include <dt-bindings/zmk/pointing.h>
 
 
 // MOUSE CONFIGS
@@ -31,26 +33,8 @@
 };
 
 
-#define U_MOUSE_MOVE_MAX 1250       // 600
-#define U_MOUSE_SCROLL_MAX 100      // 10
-
-
-#undef MOVE_UP
-#undef MOVE_DOWN
-#undef MOVE_LEFT
-#undef MOVE_RIGHT
-#define MOVE_UP MOVE_Y(-U_MOUSE_MOVE_MAX)
-#define MOVE_DOWN MOVE_Y(U_MOUSE_MOVE_MAX)
-#define MOVE_LEFT MOVE_X(-U_MOUSE_MOVE_MAX)
-#define MOVE_RIGHT MOVE_X(U_MOUSE_MOVE_MAX)
-
-
-#undef SCROLL_UP
-#undef SCROLL_DOWN
-#undef SCROLL_LEFT
-#undef SCROLL_RIGHT
-#define SCROLL_UP MOVE_Y(U_MOUSE_SCROLL_MAX)
-#define SCROLL_DOWN MOVE_Y(-U_MOUSE_SCROLL_MAX)
-#define SCROLL_LEFT MOVE_X(-U_MOUSE_SCROLL_MAX)
-#define SCROLL_RIGHT MOVE_X(U_MOUSE_SCROLL_MAX)
-
+// Names used by the keymap; SCRL_* are the upstream names for the same values.
+#define SCROLL_UP SCRL_UP
+#define SCROLL_DOWN SCRL_DOWN
+#define SCROLL_LEFT SCRL_LEFT
+#define SCROLL_RIGHT SCRL_RIGHT

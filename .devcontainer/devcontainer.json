@@ -1,13 +1,11 @@
 {
   "name": "ZMK Development",
   "build": {
+    // The context is the repo root so the Dockerfile can copy config/west.yml, the only
+    // place a ZMK or module revision is written.
+    "context": "..",
     "dockerfile": "Dockerfile",
     "args": {
-      "ZMK_URL": "https://github.com/urob/zmk.git",
-      "ZMK_BRANCH": "main",
-      "ZMK_PATH": "/zmk",
-      // "ZMK_URL": "https://github.com/zmkfirmware/zmk.git",
-      // "ZMK_BRANCH": "main",
       "USERNAME": "dev",
       "USER_UID": "${localEnv:UID:1000}",
       "USER_GID": "${localEnv:GID:1000}"
@@ -16,10 +14,11 @@
   "remoteUser": "dev",
   "updateRemoteUserUID": true,
   "runArgs": ["--security-opt", "label=disable"],
-  "updateContentCommand": "cd $ZMK_PATH && git fetch && git reset --hard origin/main && west update && west zephyr-export",
+  "updateContentCommand": "bin/west-sync",
   "containerEnv": {
     "WORKSPACE_PATH": "${containerWorkspaceFolder}",
-    "ZMK_PATH": "/zmk",
+    "ZMK_WORKSPACE": "/zmk-ws",
+    "ZMK_PATH": "/zmk-ws/zmk",
     "BUILD_SUBFOLDER": "build"
   },
   "customizations": {

@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-# Build firmware for both Corne halves inside the devcontainer.
+# Build every board/shield entry in build.yaml inside the devcontainer.
 #
-# Usage: bin/build-corne [tag]
+# Usage: bin/build-corne [tag] [filter]
+#
+#   tag     Suffix for the output files; defaults to today's date.
+#   filter  Optional substring matched against "<board> <shield>"; only matching entries are
+#           built (e.g. "eyelash_corne_left nice_view", "corne_right", "settings_reset").
 #
 # Expects ZMK_PATH, WORKSPACE_PATH and BUILD_SUBFOLDER to be set (the devcontainer does this).
-# Output: $WORKSPACE_PATH/$BUILD_SUBFOLDER/nice_nano_v2-corne-{left,right}-zmk-<tag>.uf2
+# Output: $WORKSPACE_PATH/$BUILD_SUBFOLDER/<board>-<first shield word>-zmk-<tag>.uf2
+# Build dirs: $ZMK_PATH/build/<board>-<first shield word>
 set -euo pipefail
 
 : "${ZMK_PATH:?ZMK_PATH is not set}"
@@ -12,33 +17,60 @@ set -euo pipefail
 : "${BUILD_SUBFOLDER:?BUILD_SUBFOLDER is not set}"
 
 TAG="${1:-$(date +%Y-%m-%d)}"
+FILTER="${2:-}"
 OUT_DIR="${WORKSPACE_PATH}/${BUILD_SUBFOLDER}"
 
 echo "ZMK_PATH:       ${ZMK_PATH}"
 echo "WORKSPACE_PATH: ${WORKSPACE_PATH}"
 echo "OUT_DIR:        ${OUT_DIR}"
 echo "TAG:            ${TAG}"
+echo "FILTER:         ${FILTER:-<none>}"
 
-rm -rf "${OUT_DIR}"
+# One "<board>|<shield>" line per build.yaml include entry.
+mapfile -t ENTRIES < <(python3 - "${WORKSPACE_PATH}/build.yaml" <<'EOF'
+import sys, yaml
+with open(sys.argv[1]) as f:
+    data = yaml.safe_load(f)
+for entry in data.get("include", []):
+    print(f"{entry['board']}|{entry.get('shield', '')}")
+EOF
+)
+
 mkdir -p "${OUT_DIR}"
-
 cd "${ZMK_PATH}"
 
-build-firmware() {
-    local name="$1" board="$2" shield="$3" side="$4"
-    local fw_file="${OUT_DIR}/${board}-${name}-${side}-zmk-${TAG}.uf2"
+built=()
+failed=()
+for entry in "${ENTRIES[@]}"; do
+    board="${entry%%|*}"
+    shield="${entry#*|}"
+    if [[ -n "${FILTER}" && "${board} ${shield}" != *"${FILTER}"* ]]; then
+        continue
+    fi
 
-    west build \
-        -s app \
-        --pristine \
-        -d "build/${side}" \
-        --board="${board}" \
-        -- -DSHIELD="${shield}" \
-        -DZMK_CONFIG="${WORKSPACE_PATH}/config"
+    name="${board}"
+    [[ -n "${shield}" ]] && name="${board}-${shield%% *}"
+    build_dir="build/${name}"
+    fw_file="${OUT_DIR}/${name}-zmk-${TAG}.uf2"
 
-    cp "build/${side}/zephyr/zmk.uf2" "${fw_file}"
-    echo "Built ${fw_file}"
-}
+    echo
+    echo "=== ${board} ${shield}"
+    cmake_args=(-DZMK_CONFIG="${WORKSPACE_PATH}/config")
+    [[ -n "${shield}" ]] && cmake_args+=(-DSHIELD="${shield}")
 
-build-firmware "corne" "nice_nano_v2" "corne_left nice_view_adapter nice_view" "left"
-build-firmware "corne" "nice_nano_v2" "corne_right nice_view_adapter nice_view" "right"
+    if west build -s app --pristine -d "${build_dir}" --board="${board}" -- "${cmake_args[@]}" \
+        && cp "${build_dir}/zephyr/zmk.uf2" "${fw_file}"; then
+        built+=("${fw_file}")
+    else
+        failed+=("${board} ${shield}")
+    fi
+done
+
+echo
+if [[ ${#built[@]} -eq 0 && ${#failed[@]} -eq 0 ]]; then
+    echo "No build.yaml entry matches filter '${FILTER}'." >&2
+    exit 1
+fi
+for f in "${built[@]}"; do echo "Built  ${f}"; done
+for f in "${failed[@]}"; do echo "FAILED ${f}" >&2; done
+[[ ${#failed[@]} -eq 0 ]]

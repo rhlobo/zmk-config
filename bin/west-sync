@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Re-sync the container's west workspace with config/west.yml, which is the only place a
+# revision is written. Run after changing west.yml; the devcontainer runs it on create.
+set -euo pipefail
+
+: "${WORKSPACE_PATH:?WORKSPACE_PATH is not set}"
+: "${ZMK_WORKSPACE:?ZMK_WORKSPACE is not set}"
+
+cp "${WORKSPACE_PATH}/config/west.yml" "${ZMK_WORKSPACE}/config/west.yml"
+cd "${ZMK_WORKSPACE}" && west update && west zephyr-export

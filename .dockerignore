@@ -1,0 +1,2 @@
+# Keep the Docker build context small; the image only needs config/west.yml.
+reference/

@@ -3,10 +3,9 @@
 Personal [ZMK](https://zmk.dev) firmware configuration for a 42-key Corne split keyboard
 running on nice!nano v2 controllers with nice!view displays.
 
-The firmware is built from [urob's ZMK fork](https://github.com/urob/zmk) (see
-[`config/west.yml`](config/west.yml)), which carries mouse emulation and a few display
-patches ahead of upstream. The upstream remote is kept commented out in the same file if you
-want to switch back.
+The firmware is built from upstream ZMK, pinned to the `v0.3` branch in
+[`config/west.yml`](config/west.yml), the only place a revision is written. CI and the
+devcontainer both read it.
 
 ## Layout
 
@@ -42,10 +41,12 @@ with `&to`. Press the right outer thumb key on that layer to return to Base.
 | [`config/mouse.dtsi`](config/mouse.dtsi)        | Mouse acceleration profiles and movement/scroll defines         |
 | [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
 | [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
-| [`config/west.yml`](config/west.yml)            | West manifest selecting the ZMK fork                            |
-| [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions                          |
-| [`bin/build-corne`](bin/build-corne)            | Local build script used inside the devcontainer                 |
-| [`.devcontainer/`](.devcontainer/)              | Docker image with ZMK and the Zephyr toolchain preinstalled     |
+| [`config/west.yml`](config/west.yml)            | West manifest: ZMK revision, used by CI and the devcontainer    |
+| [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions and `bin/build-corne`    |
+| [`bin/build-corne`](bin/build-corne)            | Local build script: builds every `build.yaml` entry             |
+| [`bin/west-sync`](bin/west-sync)                | Re-syncs the container's west workspace with `config/west.yml`  |
+| [`.devcontainer/`](.devcontainer/)              | Docker image with the west workspace and Zephyr toolchain       |
+| [`.dockerignore`](.dockerignore)                | Keeps `reference/` out of the Docker build context              |
 | [`TODO.md`](TODO.md)                            | Planned additions                                               |
 | `build/` (untracked)                            | Output of local builds                                          |
 | `reference/` (untracked)                        | Other people's configs kept locally for inspiration             |
@@ -71,16 +72,23 @@ Every push builds `corne_left`, `corne_right` (both with the nice!view shields) 
 
 ### Locally with the devcontainer
 
-Open the repo in VS Code and reopen in the container. The image clones the ZMK fork into
-`/zmk`, runs `west update`, and creates a non-root user whose uid/gid match the host user so
-files written to the workspace stay owned by you. Then, from the repository root:
+Open the repo in VS Code and reopen in the container. The image copies `config/west.yml`
+into a west workspace at `/zmk-ws` and runs `west update` there, so ZMK lands in `/zmk-ws/zmk`
+at the revision the manifest names. It also creates a non-root user whose uid/gid match the
+host user so files written to the workspace stay owned by you. Then, from the repository root:
 
 ```sh
-bin/build-corne [tag]
+bin/build-corne [tag] [filter]
 ```
 
-This builds both halves and writes them to `build/nice_nano_v2-corne-{left,right}-zmk-<tag>.uf2`.
-The tag defaults to today's date.
+This builds every `include` entry in `build.yaml` and writes each image to
+`build/<board>-<first shield>-zmk-<tag>.uf2`, for example
+`build/nice_nano_v2-corne_left-zmk-<tag>.uf2`. The tag defaults to today's date. `filter` is
+an optional substring matched against `"<board> <shield>"` to build only some entries, e.g.
+`bin/build-corne test corne_right`. Build directories are kept in `/zmk-ws/zmk/build/`.
+
+After editing `config/west.yml`, run `bin/west-sync` inside the container to update the
+workspace; the devcontainer also runs it every time the container is created.
 
 To build from a plain terminal without VS Code, use the devcontainer CLI:
 
@@ -97,16 +105,16 @@ Use the `settings_reset` image on both halves if they stop pairing with each oth
 
 ## Development notes
 
-- `west.yml` tracks the fork's `main` branch and the devcontainer resets to it on every
-  rebuild, so a build can break without any change here. If that happens, pin `revision` in
-  [`config/west.yml`](config/west.yml) to the last known-good commit.
-- Mouse emulation uses the input-subsystem behaviors (`&mmv`, `&msc`, `&mkp`). The older
-  `&mwh` scroll behavior and the `CONFIG_ZMK_MOUSE_*` thread options no longer exist in the
-  fork; the latter are left commented in `corne.conf` for reference.
+- The ZMK revision lives only in `config/west.yml`. The Docker image seeds its west
+  workspace from that file (the build context is the repo root for this reason), and
+  `bin/west-sync` re-applies it to a running container.
+- Until November 2026 the firmware was built from urob's ZMK fork on Zephyr 3.5. The tag
+  `corne-working-2026-11-16` marks the last commit on that fork, built and tested on the
+  device, in case the upstream build misbehaves.
+- Mouse emulation uses upstream's pointing behaviors (`&mmv`, `&msc`, `&mkp`) with speeds
+  set through `ZMK_POINTING_DEFAULT_*_VAL` in `config/mouse.dtsi`.
 - Zephyr's CMake package is registered per user with `west zephyr-export`. The Dockerfile
   runs it for the container user; if a build fails with "Could not find a package
-  configuration file provided by Zephyr", run it again inside `/zmk`.
+  configuration file provided by Zephyr", run `bin/west-sync`, which runs it again.
 - `CONFIG_ZMK_DISPLAY_INVERT=y` is reported as ignored at build time because the nice!view
   status screen does not use the LVGL mono theme the option depends on. It is harmless.
-- Behaviors and macros still carry `label` properties. Newer ZMK ignores them, so they can be
-  dropped once the fork is updated.

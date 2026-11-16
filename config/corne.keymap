@@ -97,7 +97,6 @@
         // Hold for HomeRow Mods and Tap for Keys
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
             quick-tap-ms = <100>;
@@ -109,7 +108,6 @@
         // Slow Hold for HomeRow Mods and Tap for Keys
         shm: slow_homerow_mods {
             compatible = "zmk,behavior-hold-tap";
-            label = "SLOW_HOMEROW_MODS";
             #binding-cells = <2>;
             tapping-term-ms = <250>;
             quick-tap-ms = <150>;
@@ -121,7 +119,6 @@
         // Thumb Hold for Mods and Taps for Keys
         tmt: thumb_mod_tap {
             compatible = "zmk,behavior-hold-tap";
-            label = "THUMB_MOD_TAP";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
             flavor = "hold-preferred";
@@ -131,7 +128,6 @@
         // Thumb Hold for Layers and Tap for Keys
         tlt: thumb_layer_tap {
             compatible = "zmk,behavior-hold-tap";
-            label = "THUMB_LAYER_TAP";
             #binding-cells = <2>;
             tapping-term-ms = <250>;
             quick-tap-ms = <150>;
@@ -143,7 +139,6 @@
         // Custom Hold and Tap Behavior
         cht: custom_hold_tap {
             compatible = "zmk,behavior-hold-tap";
-            label = "CUSTOM_HOLD_TAP";
             #binding-cells = <2>;
             tapping-term-ms = <175>;
             quick-tap-ms = <100>;
@@ -154,7 +149,6 @@
         // tap: BACKSPACE | RSHIFT + tap: DELETE
         bspc_del_nav: bspc_del_nav {
             compatible = "zmk,behavior-mod-morph";
-            label = "BACKSPACE_DELETE_NAV";
             #binding-cells = <0>;
             bindings = <&tlt LNAV BACKSPACE>, <&kp DELETE>;
             mods = <(MOD_RSFT)>;
@@ -163,7 +157,6 @@
         // Morphs LSHIFT + EQUAL into F4
         equal_f2_f4: equal_f2_f4 {
             compatible = "zmk,behavior-mod-morph";
-            label = "EQUAL_F2_F4";
             #binding-cells = <0>;
             bindings = <&cht F2 EQUAL>, <&kp F4>;
             mods = <(MOD_LSFT|MOD_RSFT)>;
@@ -173,7 +166,6 @@
         // Morphs LSHIFT + DOT into COLON
         dot_colon: dot_colon {
             compatible = "zmk,behavior-mod-morph";
-            label = "DOT_COLON";
             #binding-cells = <0>;
             bindings = <&kp DOT>, <&kp COLON>;
             mods = <(MOD_LSFT|MOD_RSFT)>;
@@ -183,7 +175,6 @@
         // Morphs LSHIFT + COMA into SEMI
         coma_semi: coma_semi {
             compatible = "zmk,behavior-mod-morph";
-            label = "COMA_SEMI";
             #binding-cells = <0>;
             bindings = <&kp COMMA>, <&kp SEMI>;
             mods = <(MOD_LSFT|MOD_RSFT)>;
@@ -197,7 +188,6 @@
     macros {
         // Macro: ESC :w ENTER
         nvim_save: nvim_save {
-            label = "nvim_save";
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <30>;
@@ -207,7 +197,6 @@
 
         // Macro: ESC :q! ENTER
         nvim_quit: nvim_quit {
-            label = "nvim_quit";
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <30>;
@@ -221,7 +210,6 @@
 
         // Macro: RALT+, c (CCEDIL in xpsarch keymap workaround)
         ccedil_xpsarch_macro: ccedil_xpsarch_macro {
-            label = "ccedil_xpsarch_macro";
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             wait-ms = <30>;
@@ -244,7 +232,7 @@
 //       ------------------------|    TAB    |   ENTER   |    ESC    |     |    BSPC   |   SPACE   |   CAPSW   |------------------------
 //                               -------------------------------------     -------------------------------------
         default_layer {
-            label = "Base";
+            display-name = "Base";
             bindings = <
 &trans       &kp Q       &kp W       &kp E       &kp R       &kp T             &kp Y        &kp U      &kp I        &kp O       &kp P                &trans
 &trans       &kp A       &shm LALT S &hm LCMD D  &hm LCTRL F &hm LSHIFT G     &hm RSHIFT H &hm LCTRL J &hm LCMD K   &shm LALT L &kp SQT              &trans
@@ -261,7 +249,7 @@
 //       ------------------------|           |           |           |     |███████████|           |           |------------------------
 //                               -------------------------------------     -------------------------------------
         nav_layer {
-            label = "Move";
+            display-name = "Move";
             bindings = <
 &trans    &kp LG(S) &msc SCROLL_LEFT &msc SCROLL_DOWN &msc SCROLL_UP &msc SCROLL_RIGHT           &kp HOME    &kp PG_DN    &kp PG_UP   &kp END         &kp K_CMENU      &trans
 &trans    &kp LA(TAB) &trans      &trans      &trans       &trans            &kp LEFT    &kp DOWN       &kp UP    &kp RIGHT       &kp ENTER        &trans
@@ -278,7 +266,7 @@
 //       ------------------------|           |           |           |     |           |███████████|           |------------------------
 //                               -------------------------------------     -------------------------------------
         symbol_layer {
-            label = "Symbol";
+            display-name = "Symbol";
             bindings = <
 &trans  &cht GRAVE CARET &kp EXCL  &kp AT      &kp HASH    &kp DOLLAR         &trans      &trans      &trans      &kp ASTRK   &cht BSLH KP_SLASH   &trans
 &trans    &kp TILDE     &kp QMARK &kp UNDER &cht RPAR LPAR &cht RBKT LBKT     &trans      &u_emdash   &u_middot   &kp KP_PLUS &kp MINUS            &trans
@@ -294,7 +282,7 @@
 //       ------------------------|           |           |███████████|     |     0     |           |           |------------------------
 //                               -------------------------------------     -------------------------------------
         numerical_layer {
-            label = "Numeric";
+            display-name = "Numeric";
             bindings = <
 &trans      &nvim_quit  &nvim_save  &trans      &trans       &trans      &kp N7      &kp N8      &kp N9    &kp ASTRK  &cht BSLH SLASH         &trans
 &trans      &trans      &trans      &trans      &trans       &trans      &kp N4      &kp N5      &kp N6    &kp PLUS   &kp MINUS              &trans
@@ -311,7 +299,7 @@
 //       ------------------------|           |           |           |     |           |           |███████████|------------------------
 //                               -------------------------------------     ------------------------------------
         system_layer {
-            label = "System";
+            display-name = "System";
             bindings = <
 &trans     &kp F1      &kp F2      &kp F4       &kp F5      &kp SLCK          &kp C_BRI_UP  &kp C_VOL_UP  &kp C_NEXT  &kp C_FF   &kp LC(LA(DEL))     &trans
 &trans  &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4      &kp C_BRI_DN  &kp C_VOL_DN  &kp C_PREV  &kp C_RW   &kp LC(LS(ESC))     &trans
