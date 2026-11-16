@@ -1,0 +1,39 @@
+// Macros shared by every keyboard. Requires unicode.dtsi to be included first.
+
+/ {
+    // ###############################################################################################################################
+    // MACROS ########################################################################################################################
+    // ###############################################################################################################################
+    macros {
+        // Macro: ESC :w ENTER
+        nvim_save: nvim_save {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <30>;
+            tap-ms = <40>;
+            bindings = <&macro_tap &kp ESC &kp COLON &kp W &kp ENTER>;
+        };
+
+        // Macro: ESC :q! ENTER
+        nvim_quit: nvim_quit {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <30>;
+            tap-ms = <40>;
+            bindings = <&macro_tap &kp ESC &kp COLON &kp Q &kp EXCLAMATION &kp ENTER>;
+        };
+
+        // Unicode symbols (see unicode.dtsi)
+        UNICODE_MACRO(u_emdash, N2, N0, N1, N4)     // U+2014 em dash
+        UNICODE_MACRO(u_middot, B, N7)              // U+00B7 middle dot
+
+        // Macro: RALT+, c (CCEDIL in xpsarch keymap workaround)
+        ccedil_xpsarch_macro: ccedil_xpsarch_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <30>;
+            tap-ms = <40>;
+            bindings = <&macro_tap &kp RA(COMMA) &kp C>;
+        };
+    };
+};

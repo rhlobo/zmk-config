@@ -1,0 +1,76 @@
+// Combos shared by every keyboard. Key positions are written with the KL../KR.. aliases from
+// the keyboard's *_positions.dtsi, so each combo lands on the same physical keys on every board.
+// Requires the layer index defines (LDEF..LSYS) to be defined before this file is included.
+
+/ {
+    // ###############################################################################################################################
+    // COMBOS ########################################################################################################################
+    // ###############################################################################################################################
+    combos {
+        compatible = "zmk,combos";
+//     -------------------------------------------------------------     -------------------------------------------------------------
+//     |    KL15   |    KL14   |    KL13   |    KL12   |    KL11   |     |    KR11   |    KR12   |    KR13   |    KR14   |   KR15    |
+//     |    KL25   |    KL24   |    KL23   |    KL22   |    KL21   |     |    KR21   |    KR22   |    KR23   |    KR24   |   KR25    |
+//     |    KL35   |    KL34   |    KL33   |    KL32   |    KL31   |     |    KR31   |    KR32   |    KR33   |    KR34   |   KR35    |
+//     ------------------------|    KL43   |    KL42   |    KL41   |     |    KR41   |    KR42   |    KR43   |------------------------
+//                            -------------------------------------     -------------------------------------
+
+        // STICKY LAYERS COMBO ########################################################################################################
+        // Sticks NUMERIC LAYER ON
+        combo_LNUM {
+            timeout-ms = <75>;
+            key-positions = <KL43 KL41>;
+            bindings = <&to LNUM>;
+        };
+        // Sticks NAVIGATION LAYER ON
+        combo_LNAV {
+            timeout-ms = <75>;
+            key-positions = <KL43 KR41>;
+            bindings = <&to LNAV>;
+        };
+        // Sticks SYMBOL LAYER ON
+        combo_LSYM {
+            timeout-ms = <75>;
+            key-positions = <KL43 KR42>;
+            bindings = <&to LSYM>;
+        };
+        // Sticks SYSTEM LAYER ON
+        combo_LSYS {
+            timeout-ms = <75>;
+            key-positions = <KL43 KR43>;
+            bindings = <&to LSYS>;
+        };
+
+        // MOUSE COMBOS ##############################################################################################################
+        combo_MOUSECLICK {
+            timeout-ms = <75>;
+            key-positions = <KR32 KR33 KR34>;
+            bindings = <&mkp LCLK>;
+        };
+
+        // STICKY MODS COMBOS ########################################################################################################
+        // Sticks CAPSLOCK ON
+        combo_CAPS {
+            timeout-ms = <75>;
+            key-positions = <KL43 KL42>;
+            bindings = <&kp CAPSLOCK>;
+        };
+
+        // MISCELLANEOUS COMBOS #######################################################################################################
+        // Clears current BT pairing
+        combo_BT_CRL {
+            timeout-ms = <50>;
+            key-positions = <KL25 KL24 KL23 KL22>;
+            bindings = <&bt BT_CLR>;
+            layers = <LSYS>;
+        };
+
+        // CCEDIL xpsarch combo (keymap workaround using RALT+, c)
+        combo_CCDEIL {
+            timeout-ms = <75>;
+            key-positions = <KR25 KL33>;
+            bindings = <&ccedil_xpsarch_macro>;
+            layers = <LDEF>;
+        };
+    };
+};

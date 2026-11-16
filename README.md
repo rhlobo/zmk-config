@@ -36,8 +36,11 @@ with `&to`. Press the right outer thumb key on that layer to return to Base.
 
 | Path                                            | Purpose                                                        |
 | ----------------------------------------------- | -------------------------------------------------------------- |
-| [`config/corne.keymap`](config/corne.keymap)    | Layers, behaviors, macros, and combo definitions                |
-| [`config/key_positions.dtsi`](config/key_positions.dtsi) | Key-position aliases (`KL11`…`KR43`) used by combos    |
+| [`config/corne.keymap`](config/corne.keymap)    | Corne layers; includes the shared behaviors, macros and combos  |
+| [`config/behaviors.dtsi`](config/behaviors.dtsi) | Shared hold-taps and mod-morphs                                |
+| [`config/macros.dtsi`](config/macros.dtsi)      | Shared macros (nvim, ç workaround, Unicode symbols)             |
+| [`config/combos.dtsi`](config/combos.dtsi)      | Shared combos, written against the `KL..`/`KR..` aliases        |
+| [`config/corne_positions.dtsi`](config/corne_positions.dtsi) | Corne key-position aliases (`KL11`…`KR43`) used by combos |
 | [`config/mouse.dtsi`](config/mouse.dtsi)        | Mouse acceleration profiles and movement/scroll defines         |
 | [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
 | [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
