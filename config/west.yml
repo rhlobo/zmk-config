@@ -7,5 +7,10 @@ manifest:
       remote: zmkfirmware
       revision: v0.3
       import: app/west.yml
+    # Eyelash Peripherals Corne board definition. Pinned to the last commit before "Dev1"
+    # (2026-06-05), which added cormoran's ZMK fork and DYA Studio modules.
+    - name: eyelash_corne
+      url: https://github.com/a741725193/zmk-new_corne
+      revision: a7d93082b24f5b20e710a5db9b0e3141ade229b3
   self:
     path: config

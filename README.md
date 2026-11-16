@@ -41,13 +41,16 @@ with `&to`. Press the right outer thumb key on that layer to return to Base.
 | [`config/mouse.dtsi`](config/mouse.dtsi)        | Mouse acceleration profiles and movement/scroll defines         |
 | [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
 | [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
-| [`config/west.yml`](config/west.yml)            | West manifest: ZMK revision, used by CI and the devcontainer    |
+| [`config/eyelash_corne.keymap`](config/eyelash_corne.keymap) | Eyelash Corne keymap; temporarily the vendor's, see [`EYELASH_PLAN.md`](EYELASH_PLAN.md) |
+| [`config/eyelash_corne.conf`](config/eyelash_corne.conf) | Eyelash Corne Kconfig (temporary, minimal)            |
+| [`config/west.yml`](config/west.yml)            | West manifest: ZMK and Eyelash board revisions, used by CI and the devcontainer |
 | [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions and `bin/build-corne`    |
 | [`bin/build-corne`](bin/build-corne)            | Local build script: builds every `build.yaml` entry             |
 | [`bin/west-sync`](bin/west-sync)                | Re-syncs the container's west workspace with `config/west.yml`  |
 | [`.devcontainer/`](.devcontainer/)              | Docker image with the west workspace and Zephyr toolchain       |
 | [`.dockerignore`](.dockerignore)                | Keeps `reference/` out of the Docker build context              |
 | [`TODO.md`](TODO.md)                            | Planned additions                                               |
+| [`EYELASH_PLAN.md`](EYELASH_PLAN.md)            | Spec and phased plan for Eyelash Corne support (in progress)    |
 | `build/` (untracked)                            | Output of local builds                                          |
 | `reference/` (untracked)                        | Other people's configs kept locally for inspiration             |
 
@@ -66,9 +69,13 @@ From [`config/corne.conf`](config/corne.conf):
 
 ### GitHub Actions
 
-Every push builds `corne_left`, `corne_right` (both with the nice!view shields) and a
-`settings_reset` image through ZMK's reusable `build-user-config` workflow, which reads
-`build.yaml` and `config/west.yml`. Download the `.uf2` files from the workflow run artifacts.
+Every push builds six images through ZMK's reusable `build-user-config` workflow, which reads
+`build.yaml` and `config/west.yml`: `corne_left`, `corne_right` (both with the nice!view
+shields) and `settings_reset` on `nice_nano_v2`, plus `eyelash_corne_left`,
+`eyelash_corne_right` (both with `nice_view`) and an `eyelash_corne_left` `settings_reset`.
+The Eyelash Corne board definition comes from
+[a741725193/zmk-new_corne](https://github.com/a741725193/zmk-new_corne), pinned to `a7d9308`
+in `config/west.yml`. Download the `.uf2` files from the workflow run artifacts.
 
 ### Locally with the devcontainer
 
