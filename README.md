@@ -1,7 +1,9 @@
 # LOBO's Corne — ZMK config
 
 Personal [ZMK](https://zmk.dev) firmware configuration for a 42-key Corne split keyboard
-running on nice!nano v2 controllers with nice!view displays.
+running on nice!nano v2 controllers with nice!view displays. Support for a second keyboard,
+the Eyelash Peripherals Corne, is being added from the same layout; see
+[`EYELASH_PLAN.md`](EYELASH_PLAN.md).
 
 The firmware is built from upstream ZMK, pinned to the `v0.3` branch in
 [`config/west.yml`](config/west.yml), the only place a revision is written. CI and the
@@ -15,13 +17,45 @@ a combo (see [Combos](#combos)); the right outer thumb key returns to Base from 
 
 Each layer is drawn as an ASCII diagram directly above its row macros in
 [`config/layers.dtsi`](config/layers.dtsi); that file is the source of truth for the layout.
-[`config/corne.keymap`](config/corne.keymap) only composes the layers from those macros and
-adds the outer columns.
+Combos live in [`config/combos.dtsi`](config/combos.dtsi).
+
+### Shared and per-keyboard files
+
+Everything that is part of the layout is defined once and shared by every keyboard's keymap.
+A per-keyboard file holds only what depends on that keyboard's hardware.
+
+- Shared: [`config/layers.dtsi`](config/layers.dtsi) (layer indices, diagrams and row macros),
+  [`config/behaviors.dtsi`](config/behaviors.dtsi) (hold-taps and mod-morphs),
+  [`config/macros.dtsi`](config/macros.dtsi), [`config/combos.dtsi`](config/combos.dtsi),
+  [`config/mouse.dtsi`](config/mouse.dtsi) and [`config/unicode.dtsi`](config/unicode.dtsi).
+- Per keyboard: the keymap, which includes the shared files and composes each layer from the
+  row macros plus its own extra slots; the Kconfig file; and a positions file that maps the
+  `KL..`/`KR..` aliases used by the combos to that board's key positions.
+
+`layers.dtsi` defines seven macros per layer, named `<P>_L1`…`<P>_L3` and `<P>_R1`…`<P>_R3`
+(left and right half, top to bottom row) and `<P>_T` (the six thumb keys), where `<P>` is
+`BASE`, `NAV`, `SYM`, `NUM` or `SYS`. The corne composes a layer like this, adding only its
+outer columns, which are unused on every layer:
+
+```c
+default_layer {
+    display-name = "Base";
+    bindings = <
+&trans   BASE_L1   BASE_R1   &trans
+&trans   BASE_L2   BASE_R2   &trans
+&trans   BASE_L3   BASE_R3   &trans
+         BASE_T
+    >;
+};
+```
+
+To change a binding, edit the macro and its diagram in `layers.dtsi`; never copy a row, behavior,
+macro or combo into a keyboard's keymap.
 
 ### Combos
 
-All layer combos use the left inner thumb (TAB) plus one other thumb key and lock the layer
-with `&to`. Press the right outer thumb key on that layer to return to Base.
+Defined in [`config/combos.dtsi`](config/combos.dtsi). All layer combos use the left inner
+thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the right outer thumb key on that layer to return to Base.
 
 | Keys                  | Action                                  |
 | --------------------- | --------------------------------------- |
