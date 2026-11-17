@@ -5,110 +5,65 @@
 #include "mouse.dtsi"                   // Mouse emulation tuning and movement/scroll defines
 #include "corne_positions.dtsi"         // Named key positions used by combos
 #include "unicode.dtsi"                 // UNICODE_MACRO() helper for Ctrl+Shift+U input
-
-
-// REFER TO LAYERS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// When working with layers, you may have several different key positions with bindings that enable/disable those layers.
-// To make it easier to refer to those layers in your key bindings, and to change which layers are where later, you can
-// add a set of #defines at the top of your keymap file, and use those layer in your keymap.
-#define LDEF 0
-#define LNAV 1
-#define LSYM 2
-#define LNUM 3
-#define LSYS 4
+#include "layers.dtsi"                  // Layer indices and the shared row macros (the layout)
 
 #include "behaviors.dtsi"               // Shared hold-taps and mod-morphs
 #include "macros.dtsi"                  // Shared macros
 #include "combos.dtsi"                  // Shared combos
 
+// The layout itself, with a diagram per layer, is in layers.dtsi. Each layer here adds only the
+// corne's outer columns, which are unused (&trans) on every layer.
 / {
-    // ###############################################################################################################################
-    // KEYMAP ########################################################################################################################
-    // ###############################################################################################################################
     keymap {
         compatible = "zmk,keymap";
 
-
-//       -------------------------------------------------------------     -------------------------------------------------------------
-//       |     Q     |     W     |     E     |     R     |     T     |     |     Y     |     U     |     I     |     O     |     P     |
-//       |     A     |     S     |     D     |     F     |     G     |     |     H     |     J     |     K     |     L     |    ' "    |
-//       |     Z     |     X     |     C     |     V     |     B     |     |     N     |     M     |    = F2   |    , ;    |    . :    |
-//       ------------------------|    TAB    |   ENTER   |    ESC    |     |    BSPC   |   SPACE   |   CAPSW   |------------------------
-//                               -------------------------------------     -------------------------------------
         default_layer {
             display-name = "Base";
             bindings = <
-&trans       &kp Q       &kp W       &kp E       &kp R       &kp T             &kp Y        &kp U      &kp I        &kp O       &kp P                &trans
-&trans       &kp A       &shm LALT S &hm LCMD D  &hm LCTRL F &hm LSHIFT G     &hm RSHIFT H &hm LCTRL J &hm LCMD K   &shm LALT L &kp SQT              &trans
-&trans       &kp Z       &kp X       &kp C       &kp V       &kp B             &kp N        &kp M    &equal_f2_f4 &coma_semi    &dot_colon           &trans
-                        &kp TAB    &tmt LSHFT ENTER    &tlt LNUM ESC       &bspc_del_nav   &tlt LSYM SPACE     &tlt LSYS RCTRL
+&trans   BASE_L1   BASE_R1   &trans
+&trans   BASE_L2   BASE_R2   &trans
+&trans   BASE_L3   BASE_R3   &trans
+         BASE_T
             >;
         };
 
-
-//       -------------------------------------------------------------     -------------------------------------------------------------
-//       |   WIN+S   | SCLL LEFT | SCLL DOWN |  SCLL UP  | SCLL RGHT |     |    HOME   |    PgDn   |    PgUp   |    END    |     ≣     |
-//       |  ALT+TAB  |           |           |           |           |     |    LEFT   |    DOWN   |     UP    |   RIGHT   |   ENTER   |
-//       |    UNDO   |    CUT    |    COPY   |   PASTE   |    REDO   |     |   M LEFT  |   M DOWN  |    M UP   |  M RIGHT  |  R CLICK  |
-//       ------------------------|           |           |           |     |███████████|           |           |------------------------
-//                               -------------------------------------     -------------------------------------
         nav_layer {
             display-name = "Move";
             bindings = <
-&trans    &kp LG(S) &msc SCROLL_LEFT &msc SCROLL_DOWN &msc SCROLL_UP &msc SCROLL_RIGHT           &kp HOME    &kp PG_DN    &kp PG_UP   &kp END         &kp K_CMENU      &trans
-&trans    &kp LA(TAB) &trans      &trans      &trans       &trans            &kp LEFT    &kp DOWN       &kp UP    &kp RIGHT       &kp ENTER        &trans
-&trans    &kp LC(Z)   &kp LC(X)   &kp LC(C)   &kp LC(V)    &kp LC(Y)     &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT &mkp RCLK      &trans
-                                    &trans      &trans       &trans           &trans      &trans      &to LDEF
+&trans   NAV_L1   NAV_R1   &trans
+&trans   NAV_L2   NAV_R2   &trans
+&trans   NAV_L3   NAV_R3   &trans
+         NAV_T
             >;
         };
 
-
-//       -------------------------------------------------------------     -------------------------------------------------------------
-//       |    ` ^    |     !     |     @     |     #     |     $     |     |           |           |           |     *     |    / \    |
-//       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |     —     |     ·     |     +     |     -     |
-//       |     &     |     %     |     |     |    < >    |    { }    |     |           |           |           |     ;     |     :     |
-//       ------------------------|           |           |           |     |           |███████████|           |------------------------
-//                               -------------------------------------     -------------------------------------
         symbol_layer {
             display-name = "Symbol";
             bindings = <
-&trans  &cht GRAVE CARET &kp EXCL  &kp AT      &kp HASH    &kp DOLLAR         &trans      &trans      &trans      &kp ASTRK   &cht BSLH KP_SLASH   &trans
-&trans    &kp TILDE     &kp QMARK &kp UNDER &cht RPAR LPAR &cht RBKT LBKT     &trans      &u_emdash   &u_middot   &kp KP_PLUS &kp MINUS            &trans
-&trans    &kp AMPS      &kp PRCNT  &kp PIPE   &cht GT LT   &cht RBRC LBRC     &trans      &trans      &trans      &kp SEMI    &kp COLON            &trans
-                                    &trans       &trans       &trans          &trans      &trans      &to LDEF
+&trans   SYM_L1   SYM_R1   &trans
+&trans   SYM_L2   SYM_R2   &trans
+&trans   SYM_L3   SYM_R3   &trans
+         SYM_T
             >;
         };
 
-//       -------------------------------------------------------------     -------------------------------------------------------------
-//       |  ESC :q!  |  ESC :w   |           |           |           |     |     7     |     8     |     9     |     *     |    / \    |
-//       |           |           |           |           |           |     |     4     |     5     |     6     |     +     |     -     |
-//       |           |           |           |           |           |     |     1     |     2     |     3     |           |           |
-//       ------------------------|           |           |███████████|     |     0     |           |           |------------------------
-//                               -------------------------------------     -------------------------------------
         numerical_layer {
             display-name = "Numeric";
             bindings = <
-&trans      &nvim_quit  &nvim_save  &trans      &trans       &trans      &kp N7      &kp N8      &kp N9    &kp ASTRK  &cht BSLH SLASH         &trans
-&trans      &trans      &trans      &trans      &trans       &trans      &kp N4      &kp N5      &kp N6    &kp PLUS   &kp MINUS              &trans
-&trans      &trans      &trans      &trans      &trans       &trans      &kp N1      &kp N2      &kp N3    &trans     &trans                 &trans
-                                 &trans       &trans       &trans          &kp N0     &trans      &to LDEF
+&trans   NUM_L1   NUM_R1   &trans
+&trans   NUM_L2   NUM_R2   &trans
+&trans   NUM_L3   NUM_R3   &trans
+         NUM_T
             >;
         };
 
-
-//       -------------------------------------------------------------     -------------------------------------------------------------
-//       |     F1    |     F2    |     F4    |     F5    |  SCRLOCK  |     |    B.UP   |    V.UP   |    NEXT   |    FF     |CTL+ALT+DEL|
-//       |    BT1    |    BT2    |    BT3    |    BT4    |    BT5    |     |   B.DOWN  |   V.DOWN  |    PREV   |    RW     |CTL+SHT+ESC|
-//       |     F8    |    F10    |    F11    |    F12    |   PSCRN   |     |▒▒▒▒▒▒▒▒▒▒▒|    MUTE   |    PLAY   |▒▒▒▒▒▒▒▒▒▒▒| EXT.POWER |
-//       ------------------------|           |           |           |     |           |           |███████████|------------------------
-//                               -------------------------------------     ------------------------------------
         system_layer {
             display-name = "System";
             bindings = <
-&trans     &kp F1      &kp F2      &kp F4       &kp F5      &kp SLCK          &kp C_BRI_UP  &kp C_VOL_UP  &kp C_NEXT  &kp C_FF   &kp LC(LA(DEL))     &trans
-&trans  &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4      &kp C_BRI_DN  &kp C_VOL_DN  &kp C_PREV  &kp C_RW   &kp LC(LS(ESC))     &trans
-&trans     &kp F8      &kp F10     &kp F11      &kp F12     &kp PSCRN         &none         &kp C_MUTE    &kp C_PP    &none      &ext_power EP_TOG   &trans
-                                   &trans       &trans      &trans            &trans     &trans       &to LDEF
+&trans   SYS_L1   SYS_R1   &trans
+&trans   SYS_L2   SYS_R2   &trans
+&trans   SYS_L3   SYS_R3   &trans
+         SYS_T
             >;
         };
     };

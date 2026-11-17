@@ -11,5 +11,5 @@ project overview, file layout, and build instructions.
 - Ignore the `reference/` directory; it holds third-party configs for inspiration only.
 - Commit only when explicitly asked. Never add a `Co-Authored-By` line or any other
   attribution to commit messages.
-- The keymap in [`config/corne.keymap`](config/corne.keymap) is the source of truth for the layout. Keep the ASCII
-  diagrams above each layer in sync when changing bindings.
+- [`config/layers.dtsi`](config/layers.dtsi) is the source of truth for the layout. Keep the ASCII
+  diagram above each layer's row macros in sync when changing bindings.

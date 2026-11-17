@@ -13,8 +13,10 @@ QWERTY base with home-row mods, mod-morphs for shifted punctuation, and thumb ke
 modifiers or layer-taps when held. Layers are reached by holding a thumb key, or locked on with
 a combo (see [Combos](#combos)); the right outer thumb key returns to Base from any locked layer.
 
-Each layer is drawn as an ASCII diagram directly above its bindings in
-[`config/corne.keymap`](config/corne.keymap); that file is the source of truth for the layout.
+Each layer is drawn as an ASCII diagram directly above its row macros in
+[`config/layers.dtsi`](config/layers.dtsi); that file is the source of truth for the layout.
+[`config/corne.keymap`](config/corne.keymap) only composes the layers from those macros and
+adds the outer columns.
 
 ### Combos
 
@@ -36,7 +38,8 @@ with `&to`. Press the right outer thumb key on that layer to return to Base.
 
 | Path                                            | Purpose                                                        |
 | ----------------------------------------------- | -------------------------------------------------------------- |
-| [`config/corne.keymap`](config/corne.keymap)    | Corne layers; includes the shared behaviors, macros and combos  |
+| [`config/layers.dtsi`](config/layers.dtsi)      | Shared layout: layer indices, diagrams and row macros           |
+| [`config/corne.keymap`](config/corne.keymap)    | Corne keymap: composes the layers, adds the outer columns       |
 | [`config/behaviors.dtsi`](config/behaviors.dtsi) | Shared hold-taps and mod-morphs                                |
 | [`config/macros.dtsi`](config/macros.dtsi)      | Shared macros (nvim, ç workaround, Unicode symbols)             |
 | [`config/combos.dtsi`](config/combos.dtsi)      | Shared combos, written against the `KL..`/`KR..` aliases        |

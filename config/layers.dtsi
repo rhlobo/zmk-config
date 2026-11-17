@@ -1,0 +1,94 @@
+// The shared layout: layer indices and, per layer, seven row macros covering the 42 positions
+// every keyboard has. This file is the source of truth for the layout; keep each ASCII diagram
+// in sync with the macros below it.
+//
+// Each keyboard's keymap composes a layer from these macros and adds its own slots around them
+// (the outer columns, and the Eyelash Corne's joystick and encoder push):
+//
+//     <outer>  <P>_L1  <P>_R1  <outer>        <P> is BASE, NAV, SYM, NUM or SYS.
+//     <outer>  <P>_L2  <P>_R2  <outer>        L/R: left/right half, 1-3: top to bottom row,
+//     <outer>  <P>_L3  <P>_R3  <outer>        T: the six thumb keys, left to right.
+//              <P>_T
+//
+// Must be included before behaviors.dtsi and combos.dtsi, which use the layer indices.
+
+#define LDEF 0
+#define LNAV 1
+#define LSYM 2
+#define LNUM 3
+#define LSYS 4
+
+// BASE ----------------------------------------------------------------------------------------
+//       -------------------------------------------------------------     -------------------------------------------------------------
+//       |     Q     |     W     |     E     |     R     |     T     |     |     Y     |     U     |     I     |     O     |     P     |
+//       |     A     |     S     |     D     |     F     |     G     |     |     H     |     J     |     K     |     L     |    ' "    |
+//       |     Z     |     X     |     C     |     V     |     B     |     |     N     |     M     |    = F2   |    , ;    |    . :    |
+//       ------------------------|    TAB    |   ENTER   |    ESC    |     |    BSPC   |   SPACE   |   CAPSW   |------------------------
+//                               -------------------------------------     -------------------------------------
+#define BASE_L1 &kp Q        &kp W        &kp E        &kp R         &kp T
+#define BASE_R1 &kp Y        &kp U        &kp I        &kp O         &kp P
+#define BASE_L2 &kp A        &shm LALT S  &hm LCMD D   &hm LCTRL F   &hm LSHIFT G
+#define BASE_R2 &hm RSHIFT H &hm LCTRL J  &hm LCMD K   &shm LALT L   &kp SQT
+#define BASE_L3 &kp Z        &kp X        &kp C        &kp V         &kp B
+#define BASE_R3 &kp N        &kp M        &equal_f2_f4 &coma_semi    &dot_colon
+#define BASE_T  &kp TAB  &tmt LSHFT ENTER  &tlt LNUM ESC      &bspc_del_nav  &tlt LSYM SPACE  &tlt LSYS RCTRL
+
+// MOVE ----------------------------------------------------------------------------------------
+//       -------------------------------------------------------------     -------------------------------------------------------------
+//       |   WIN+S   | SCLL LEFT | SCLL DOWN |  SCLL UP  | SCLL RGHT |     |    HOME   |    PgDn   |    PgUp   |    END    |     ≣     |
+//       |  ALT+TAB  |           |           |           |           |     |    LEFT   |    DOWN   |     UP    |   RIGHT   |   ENTER   |
+//       |    UNDO   |    CUT    |    COPY   |   PASTE   |    REDO   |     |   M LEFT  |   M DOWN  |    M UP   |  M RIGHT  |  R CLICK  |
+//       ------------------------|           |           |           |     |███████████|           |           |------------------------
+//                               -------------------------------------     -------------------------------------
+#define NAV_L1 &kp LG(S)       &msc SCROLL_LEFT  &msc SCROLL_DOWN  &msc SCROLL_UP  &msc SCROLL_RIGHT
+#define NAV_R1 &kp HOME        &kp PG_DN         &kp PG_UP         &kp END         &kp K_CMENU
+#define NAV_L2 &kp LA(TAB)     &trans            &trans            &trans          &trans
+#define NAV_R2 &kp LEFT        &kp DOWN          &kp UP            &kp RIGHT       &kp ENTER
+#define NAV_L3 &kp LC(Z)       &kp LC(X)         &kp LC(C)         &kp LC(V)       &kp LC(Y)
+#define NAV_R3 &mmv MOVE_LEFT  &mmv MOVE_DOWN    &mmv MOVE_UP      &mmv MOVE_RIGHT &mkp RCLK
+#define NAV_T  &trans  &trans  &trans      &trans  &trans  &to LDEF
+
+// SYMBOL --------------------------------------------------------------------------------------
+//       -------------------------------------------------------------     -------------------------------------------------------------
+//       |    ` ^    |     !     |     @     |     #     |     $     |     |           |           |           |     *     |    / \    |
+//       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |     —     |     ·     |     +     |     -     |
+//       |     &     |     %     |     |     |    < >    |    { }    |     |           |           |           |     ;     |     :     |
+//       ------------------------|           |           |           |     |           |███████████|           |------------------------
+//                               -------------------------------------     -------------------------------------
+#define SYM_L1 &cht GRAVE CARET  &kp EXCL   &kp AT     &kp HASH        &kp DOLLAR
+#define SYM_R1 &trans            &trans     &trans     &kp ASTRK       &cht BSLH KP_SLASH
+#define SYM_L2 &kp TILDE         &kp QMARK  &kp UNDER  &cht RPAR LPAR  &cht RBKT LBKT
+#define SYM_R2 &trans            &u_emdash  &u_middot  &kp KP_PLUS     &kp MINUS
+#define SYM_L3 &kp AMPS          &kp PRCNT  &kp PIPE   &cht GT LT      &cht RBRC LBRC
+#define SYM_R3 &trans            &trans     &trans     &kp SEMI        &kp COLON
+#define SYM_T  &trans  &trans  &trans      &trans  &trans  &to LDEF
+
+// NUMERIC -------------------------------------------------------------------------------------
+//       -------------------------------------------------------------     -------------------------------------------------------------
+//       |  ESC :q!  |  ESC :w   |           |           |           |     |     7     |     8     |     9     |     *     |    / \    |
+//       |           |           |           |           |           |     |     4     |     5     |     6     |     +     |     -     |
+//       |           |           |           |           |           |     |     1     |     2     |     3     |           |           |
+//       ------------------------|           |           |███████████|     |     0     |           |           |------------------------
+//                               -------------------------------------     -------------------------------------
+#define NUM_L1 &nvim_quit  &nvim_save  &trans  &trans     &trans
+#define NUM_R1 &kp N7      &kp N8      &kp N9  &kp ASTRK  &cht BSLH SLASH
+#define NUM_L2 &trans      &trans      &trans  &trans     &trans
+#define NUM_R2 &kp N4      &kp N5      &kp N6  &kp PLUS   &kp MINUS
+#define NUM_L3 &trans      &trans      &trans  &trans     &trans
+#define NUM_R3 &kp N1      &kp N2      &kp N3  &trans     &trans
+#define NUM_T  &trans  &trans  &trans      &kp N0  &trans  &to LDEF
+
+// SYSTEM --------------------------------------------------------------------------------------
+//       -------------------------------------------------------------     -------------------------------------------------------------
+//       |     F1    |     F2    |     F4    |     F5    |  SCRLOCK  |     |    B.UP   |    V.UP   |    NEXT   |    FF     |CTL+ALT+DEL|
+//       |    BT1    |    BT2    |    BT3    |    BT4    |    BT5    |     |   B.DOWN  |   V.DOWN  |    PREV   |    RW     |CTL+SHT+ESC|
+//       |     F8    |    F10    |    F11    |    F12    |   PSCRN   |     |▒▒▒▒▒▒▒▒▒▒▒|    MUTE   |    PLAY   |▒▒▒▒▒▒▒▒▒▒▒| EXT.POWER |
+//       ------------------------|           |           |           |     |           |           |███████████|------------------------
+//                               -------------------------------------     ------------------------------------
+#define SYS_L1 &kp F1        &kp F2        &kp F4        &kp F5        &kp SLCK
+#define SYS_R1 &kp C_BRI_UP  &kp C_VOL_UP  &kp C_NEXT    &kp C_FF      &kp LC(LA(DEL))
+#define SYS_L2 &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+#define SYS_R2 &kp C_BRI_DN  &kp C_VOL_DN  &kp C_PREV    &kp C_RW      &kp LC(LS(ESC))
+#define SYS_L3 &kp F8        &kp F10       &kp F11       &kp F12       &kp PSCRN
+#define SYS_R3 &none         &kp C_MUTE    &kp C_PP      &none         &ext_power EP_TOG
+#define SYS_T  &trans  &trans  &trans      &trans  &trans  &to LDEF
