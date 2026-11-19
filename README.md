@@ -64,7 +64,7 @@ thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the ri
 | TAB + BSPC            | Lock Move layer                         |
 | TAB + SPACE           | Lock Symbol layer                       |
 | TAB + RCTL            | Lock System layer                       |
-| M DOWN + M UP + M RGT | Left mouse click                        |
+| M + = + , (Move: ↓ ↑ →) | Left mouse click                      |
 | `'` + C               | ç (via RALT+`,` then `c`, for xps-arch) |
 | A + S + D + F         | Clear Bluetooth bond (System layer only)|
 
@@ -82,7 +82,7 @@ thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the ri
 | [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
 | [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
 | [`config/eyelash_corne.keymap`](config/eyelash_corne.keymap) | Eyelash Corne keymap; temporarily the vendor's, see [`EYELASH_PLAN.md`](EYELASH_PLAN.md) |
-| [`config/eyelash_corne.conf`](config/eyelash_corne.conf) | Eyelash Corne Kconfig (temporary, minimal)            |
+| [`config/eyelash_corne.conf`](config/eyelash_corne.conf) | Eyelash Corne Kconfig (temporary, minimal; backlight on, which the screens need) |
 | [`config/west.yml`](config/west.yml)            | West manifest: ZMK and Eyelash board revisions, used by CI and the devcontainer |
 | [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions and `bin/build-corne`    |
 | [`bin/build-corne`](bin/build-corne)            | Local build script: builds every `build.yaml` entry             |
@@ -163,5 +163,8 @@ Use the `settings_reset` image on both halves if they stop pairing with each oth
 - Zephyr's CMake package is registered per user with `west zephyr-export`. The Dockerfile
   runs it for the container user; if a build fails with "Could not find a package
   configuration file provided by Zephyr", run `bin/west-sync`, which runs it again.
+- On the Eyelash Corne the nice!view screens stay blank unless the backlight output (P1.13)
+  is driven, so `config/eyelash_corne.conf` enables the backlight at 100%. Do not bind `&bl`
+  keys on it; dimming or switching the backlight off blanks the screens.
 - `CONFIG_ZMK_DISPLAY_INVERT=y` is reported as ignored at build time because the nice!view
   status screen does not use the LVGL mono theme the option depends on. It is harmless.

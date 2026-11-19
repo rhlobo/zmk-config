@@ -35,32 +35,32 @@
 
 // MOVE ----------------------------------------------------------------------------------------
 //       -------------------------------------------------------------     -------------------------------------------------------------
-//       |   WIN+S   | SCLL LEFT | SCLL DOWN |  SCLL UP  | SCLL RGHT |     |    HOME   |    PgDn   |    PgUp   |    END    |     ≣     |
+//       |  R CLICK  |   M LEFT  |   M DOWN  |    M UP   |  M RIGHT  |     |    HOME   |    PgDn   |    PgUp   |    END    |     ≣     |
 //       |  ALT+TAB  |           |           |           |           |     |    LEFT   |    DOWN   |     UP    |   RIGHT   |   ENTER   |
-//       |    UNDO   |    CUT    |    COPY   |   PASTE   |    REDO   |     |   M LEFT  |   M DOWN  |    M UP   |  M RIGHT  |  R CLICK  |
+//       |    UNDO   |    CUT    |    COPY   |   PASTE   |    REDO   |     |     ←     |     ↓     |     ↑     |     →     |     ↳     |
 //       ------------------------|           |           |           |     |███████████|           |           |------------------------
 //                               -------------------------------------     -------------------------------------
-#define NAV_L1 &kp LG(S)       &msc SCROLL_LEFT  &msc SCROLL_DOWN  &msc SCROLL_UP  &msc SCROLL_RIGHT
+#define NAV_L1 &mkp RCLK       &mmv MOVE_LEFT    &mmv MOVE_DOWN    &mmv MOVE_UP    &mmv MOVE_RIGHT
 #define NAV_R1 &kp HOME        &kp PG_DN         &kp PG_UP         &kp END         &kp K_CMENU
 #define NAV_L2 &kp LA(TAB)     &trans            &trans            &trans          &trans
 #define NAV_R2 &kp LEFT        &kp DOWN          &kp UP            &kp RIGHT       &kp ENTER
 #define NAV_L3 &kp LC(Z)       &kp LC(X)         &kp LC(C)         &kp LC(V)       &kp LC(Y)
-#define NAV_R3 &mmv MOVE_LEFT  &mmv MOVE_DOWN    &mmv MOVE_UP      &mmv MOVE_RIGHT &mkp RCLK
+#define NAV_R3 &u_arrow_l      &u_arrow_d        &u_arrow_u        &u_arrow_r      &u_arrow_dr
 #define NAV_T  &trans  &trans  &trans      &trans  &trans  &to LDEF
 
 // SYMBOL --------------------------------------------------------------------------------------
 //       -------------------------------------------------------------     -------------------------------------------------------------
-//       |    ` ^    |     !     |     @     |     #     |     $     |     |           |           |           |     *     |    / \    |
-//       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |     —     |     ·     |     +     |     -     |
-//       |     &     |     %     |     |     |    < >    |    { }    |     |           |           |           |     ;     |     :     |
+//       |    ` ^    |     !     |     @     |     #     |     $     |     |     ⚠     |     ✅    |     ❌    |     *     |    / \    |
+//       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |           |           |     +     |     -     |
+//       |     &     |     %     |     |     |    < >    |    { }    |     |     ·     |     —     |     ⇒     |     ;     |     :     |
 //       ------------------------|           |           |           |     |           |███████████|           |------------------------
 //                               -------------------------------------     -------------------------------------
 #define SYM_L1 &cht GRAVE CARET  &kp EXCL   &kp AT     &kp HASH        &kp DOLLAR
-#define SYM_R1 &trans            &trans     &trans     &kp ASTRK       &cht BSLH KP_SLASH
+#define SYM_R1 &u_warning        &u_check   &u_cross   &kp ASTRK       &cht BSLH KP_SLASH
 #define SYM_L2 &kp TILDE         &kp QMARK  &kp UNDER  &cht RPAR LPAR  &cht RBKT LBKT
-#define SYM_R2 &trans            &u_emdash  &u_middot  &kp KP_PLUS     &kp MINUS
+#define SYM_R2 &trans            &trans     &trans     &kp KP_PLUS     &kp MINUS
 #define SYM_L3 &kp AMPS          &kp PRCNT  &kp PIPE   &cht GT LT      &cht RBRC LBRC
-#define SYM_R3 &trans            &trans     &trans     &kp SEMI        &kp COLON
+#define SYM_R3 &u_middot         &u_emdash  &u_implies &kp SEMI        &kp COLON
 #define SYM_T  &trans  &trans  &trans      &trans  &trans  &to LDEF
 
 // NUMERIC -------------------------------------------------------------------------------------

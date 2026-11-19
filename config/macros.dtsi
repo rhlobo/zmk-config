@@ -26,6 +26,15 @@
         // Unicode symbols (see unicode.dtsi)
         UNICODE_MACRO(u_emdash, N2, N0, N1, N4)     // U+2014 em dash
         UNICODE_MACRO(u_middot, B, N7)              // U+00B7 middle dot
+        UNICODE_MACRO(u_implies, N2, N1, D, N2)     // U+21D2 ⇒ implies
+        UNICODE_MACRO(u_check, N2, N7, N0, N5)      // U+2705 ✅ check mark
+        UNICODE_MACRO(u_cross, N2, N7, N4, C)       // U+274C ❌ cross mark
+        UNICODE_MACRO(u_warning, N2, N6, A, N0)     // U+26A0 ⚠ warning sign
+        UNICODE_MACRO(u_arrow_l, N2, N1, N9, N0)    // U+2190 ← leftwards arrow
+        UNICODE_MACRO(u_arrow_u, N2, N1, N9, N1)    // U+2191 ↑ upwards arrow
+        UNICODE_MACRO(u_arrow_r, N2, N1, N9, N2)    // U+2192 → rightwards arrow
+        UNICODE_MACRO(u_arrow_d, N2, N1, N9, N3)    // U+2193 ↓ downwards arrow
+        UNICODE_MACRO(u_arrow_dr, N2, N1, B, N3)    // U+21B3 ↳ down-right arrow
 
         // Macro: RALT+, c (CCEDIL in xpsarch keymap workaround)
         ccedil_xpsarch_macro: ccedil_xpsarch_macro {

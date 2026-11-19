@@ -8,6 +8,7 @@ Status: spec, not implemented. Written 2026-11-16 after interviewing the owner.
 | --- | --- |
 | Vendor module pin | `a741725193/zmk-new_corne` at `a7d93082b24f5b20e710a5db9b0e3141ade229b3` (2026-03-05, last commit before "Dev1"). At this revision the keyboard is a Zephyr **board** (`eyelash_corne_left`, `eyelash_corne_right`), not a shield; nice!view is its only shield. The pin includes the January 2026 encoder fix (steps 40, 20 triggers per rotation). |
 | Base firmware | Upstream ZMK `v0.3`, unchanged. Verified: both eyelash halves build with no extra modules and with RGB, backlight, soft-off and Studio off. |
+| Backlight (amended 2026-11-19) | On at 100% on the Eyelash only (`CONFIG_ZMK_BACKLIGHT=y`, `CONFIG_ZMK_BACKLIGHT_BRT_START=100`), no `&bl` keys. Device testing showed the nice!view screens stay blank unless the backlight output (P1.13) is driven. |
 | Encoder (left half) | Base: volume. Move: vertical scroll. Symbol: horizontal scroll. Numeric: inherits Base. System: screen brightness. |
 | Encoder push (left half, Z row) | Base: mute. Move: left click. Other layers: `&trans`. |
 | Joystick (right half) | Base: mouse movement, press = left click, Shift + press = right click. Move, Symbol, Numeric: inherit Base. System: prev/next on left/right, volume on up/down, play/pause on press. |
@@ -20,7 +21,7 @@ Status: spec, not implemented. Written 2026-11-16 after interviewing the owner.
 | Keyboard name | `LOBO's Corne` stays; the second is `Eyelash-Corne`. NKRO and smooth scrolling are not enabled; both keyboards get the same settings. |
 | Central half | Left on both boards. Flashing and pairing instructions stay the same. |
 
-Out of scope: outer-column keys, RGB, backlight, soft-off, ZMK Studio, DYA modules.
+Out of scope: outer-column keys, RGB, backlight as a lighting feature (see the amendment above), soft-off, ZMK Studio, DYA modules.
 
 ## 2. Hardware facts used by the spec
 
@@ -352,7 +353,9 @@ No `ZMK_EXTRA_MODULES` is needed: the workspace already contains the module.
 `config/eyelash_corne.conf`: copy of `corne.conf` with `CONFIG_ZMK_KEYBOARD_NAME="Eyelash-Corne"`
 and a top comment: "Shared block mirrors config/corne.conf; change both." The same comment goes
 at the top of `corne.conf`. Nothing else differs: EC11 and ext power come from the board
-defconfig; RGB, backlight, soft-off, Studio, NKRO and smooth scrolling are left off.
+defconfig; RGB, soft-off, Studio, NKRO and smooth scrolling are left off. Exception (2026-11-19):
+`CONFIG_ZMK_BACKLIGHT=y` and `CONFIG_ZMK_BACKLIGHT_BRT_START=100`, with a comment, because the
+screens need the backlight output driven.
 
 ## 5. Files
 

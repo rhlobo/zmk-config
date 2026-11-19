@@ -23,10 +23,10 @@ tasks_version: "0.4"
   - [ ] `–` en dash: ranges (10–20) and compound links (suggested addition)
   - [x] `·` middle dot: list separator, multiplication in some notations (done 2026-11-16)
   - [ ] `…` ellipsis: trailing-off or omitted text (suggested addition)
-- [ ] **Status marks** — chat, notes, and commit messages. #P2
-  - [ ] `✅` check mark: done, approved
-  - [ ] `❌` cross mark: failed, rejected
-  - [ ] `⚠` warning sign (suggested addition)
+- [x] **Status marks** — chat, notes, and commit messages. (done 2026-11-17) #P2
+  - [x] `✅` check mark: done, approved (done 2026-11-17)
+  - [x] `❌` cross mark: failed, rejected (done 2026-11-17)
+  - [x] `⚠` warning sign (suggested addition) (done 2026-11-17)
 
 ## Ordinals, degrees and superscripts
 
@@ -95,13 +95,13 @@ tasks_version: "0.4"
 ## Arrows
 
 - [ ] **Basic arrows** — directions, "leads to", keyboard-shortcut docs. #P1
-  - [ ] `→` rightwards arrow: maps to, then, result
-  - [ ] `←` leftwards arrow
-  - [ ] `↑` upwards arrow
-  - [ ] `↓` downwards arrow
+  - [x] `→` rightwards arrow: maps to, then, result (done 2026-11-17)
+  - [x] `←` leftwards arrow (done 2026-11-17)
+  - [x] `↑` upwards arrow (done 2026-11-17)
+  - [x] `↓` downwards arrow (done 2026-11-17)
   - [ ] `↔` left-right arrow: bidirectional, equivalent
 - [ ] **Double arrows** — implication in logic and "therefore" in prose. #P2
-  - [ ] `⇒` implies
+  - [x] `⇒` implies (done 2026-11-17)
   - [ ] `⇔` if and only if
   - [ ] `⇏` does not imply
   - [ ] `⇎` not equivalent
@@ -109,7 +109,7 @@ tasks_version: "0.4"
   - [ ] `⇐` leftwards double arrow: is implied by (suggested addition)
 - [ ] **Function and flow arrows** — code and diagrams. #P2
   - [ ] `↦` maps to: function definition (x ↦ x²)
-  - [ ] `↳` down-right arrow: nested reply, tree child, "continued below"
+  - [x] `↳` down-right arrow: nested reply, tree child, "continued below" (done 2026-11-17)
   - [ ] `↪` right hook arrow: inclusion map, "redirects to"
   - [ ] `↣` right tail arrow: injective function
   - [ ] `↠` two-headed arrow: surjective function (suggested addition)
