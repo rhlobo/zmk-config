@@ -42,10 +42,12 @@
         };
 
         // MOUSE COMBOS ##############################################################################################################
+        // Left click: R + T on the Move layer (M UP + M RIGHT there)
         combo_MOUSECLICK {
             timeout-ms = <75>;
-            key-positions = <KR32 KR33 KR34>;
+            key-positions = <KL12 KL11>;
             bindings = <&mkp LCLK>;
+            layers = <LNAV>;
         };
 
         // STICKY MODS COMBOS ########################################################################################################

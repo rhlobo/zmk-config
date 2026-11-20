@@ -64,7 +64,7 @@ thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the ri
 | TAB + BSPC            | Lock Move layer                         |
 | TAB + SPACE           | Lock Symbol layer                       |
 | TAB + RCTL            | Lock System layer                       |
-| M + = + , (Move: ↓ ↑ →) | Left mouse click                      |
+| R + T (Move layer only: M UP + M RIGHT) | Left mouse click      |
 | `'` + C               | ç (via RALT+`,` then `c`, for xps-arch) |
 | A + S + D + F         | Clear Bluetooth bond (System layer only)|
 
