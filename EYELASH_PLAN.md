@@ -1,6 +1,6 @@
 # Spec and plan: Eyelash Corne support from one `master`
 
-Status: spec, not implemented. Written 2026-11-16 after interviewing the owner.
+Status: Phases 0–3 implemented (steps 6–8 together, see the amendments in section 1). Written 2026-11-16 after interviewing the owner.
 
 ## 1. Decisions (from the interview)
 
@@ -20,6 +20,21 @@ Status: spec, not implemented. Written 2026-11-16 after interviewing the owner.
 | Settings reset | A dedicated `eyelash_corne_left` + `settings_reset` entry. |
 | Keyboard name | `LOBO's Corne` stays; the second is `Eyelash-Corne`. NKRO and smooth scrolling are not enabled; both keyboards get the same settings. |
 | Central half | Left on both boards. Flashing and pairing instructions stay the same. |
+
+### Amendments by the owner (2026-11-20)
+
+Agreed while carrying out steps 6–8, which were done together in one change:
+
+- Outer columns, the joystick on Move, Symbol and Sim, and a sixth layer `Sim` (Eyelash only,
+  index 5, toggled by the right outer top key on Base) are in scope. The bindings are listed in
+  the comment table at the top of `config/eyelash_corne.keymap` and in the README.
+- Encoder, replacing section 3.5: Base vertical scroll, push = middle click; Move horizontal
+  scroll, push = right click; Symbol volume, push = mute; System brightness, push = lock (Win+L);
+  Numeric scrolls as Base, push = keypad Enter; Sim sends Ctrl+F13 / Ctrl+F14, push = Ctrl+F15.
+- Smooth scrolling is enabled on both keyboards at the same time (the TODO item).
+- Step 7's direction check is done on the device with the final bindings.
+- The encoder and joystick behaviours live in `eyelash_corne.keymap` (they are hardware-specific),
+  not in `behaviors.dtsi`.
 
 Out of scope: outer-column keys, RGB, backlight as a lighting feature (see the amendment above), soft-off, ZMK Studio, DYA modules.
 

@@ -1,0 +1,61 @@
+// Key-position aliases for the Eyelash Corne, the twin of corne_positions.dtsi: the same
+// K<side><row><column> names map to this board's positions, so every combo in combos.dtsi lands
+// on the same physical keys on both keyboards. Also names the joystick and encoder-push slots.
+//
+// Positions follow the vendor's matrix transform (48 keys): each row lists the left outer key,
+// the left half, the extra slots in the middle, the right half, then the right outer key.
+//
+//  0  |  1     2     3     4     5  |        6         |  7     8     9    10    11  | 12
+// 13  | 14    15    16    17    18  |  19    20    21  | 22    23    24    25    26  | 27
+// 28  | 29    30    31    32    33  |  34          35  | 36    37    38    39    40  | 41
+//                   42    43    44                       45    46    47
+//
+//  6 joystick up    19 joystick left    20 joystick press    21 joystick right
+// 35 joystick down  34 encoder push (left half)
+
+#define KL15 1
+#define KL14 2
+#define KL13 3
+#define KL12 4
+#define KL11 5
+#define KR11 7
+#define KR12 8
+#define KR13 9
+#define KR14 10
+#define KR15 11
+
+#define KL25 14
+#define KL24 15
+#define KL23 16
+#define KL22 17
+#define KL21 18
+#define KR21 22
+#define KR22 23
+#define KR23 24
+#define KR24 25
+#define KR25 26
+
+#define KL35 29
+#define KL34 30
+#define KL33 31
+#define KL32 32
+#define KL31 33
+#define KR31 36
+#define KR32 37
+#define KR33 38
+#define KR34 39
+#define KR35 40
+
+#define KL43 42
+#define KL42 43
+#define KL41 44
+#define KR41 45
+#define KR42 46
+#define KR43 47
+
+#define JOY_UP    6
+#define JOY_LEFT  19
+#define JOY_PRESS 20
+#define JOY_RIGHT 21
+#define JOY_DOWN  35
+#define ENC_PUSH  34

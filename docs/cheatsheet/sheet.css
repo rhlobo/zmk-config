@@ -1,0 +1,107 @@
+  @page { size: A4 landscape; margin: 8mm; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, "Segoe UI", "Helvetica Neue", "DejaVu Sans", "Noto Sans Symbols 2",
+                 "Noto Sans Symbols", "Segoe UI Symbol", "Apple Symbols", sans-serif;
+    color: #0f172a; background: #cbd5e1;
+  }
+  .page {
+    --k: 1; --ks: 1;
+    width: 281mm; height: 193.5mm; overflow: hidden; background: #fff;
+    display: flex; flex-direction: column; gap: 1.3mm;
+  }
+  @media screen {
+    .page { margin: 8mm auto; outline: 8mm solid #fff; box-shadow: 0 0 0 8mm #fff, 0 2mm 14mm 8mm #0005; }
+  }
+  @media print { body { background: #fff; } }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; height: 5mm; flex: none; }
+  header h1 { margin: 0; font-size: 11pt; letter-spacing: .02em; white-space: nowrap; }
+  header .glossary { font-size: 7.2pt; color: #334155; white-space: pre; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4mm 2.4mm; flex: none; }
+  .layer { border: .3mm solid var(--c); border-radius: 1.4mm; overflow: hidden; }
+  .layer > h2 {
+    margin: 0; height: 5.2mm; padding: 0 1.6mm; display: flex; align-items: center; gap: 2mm;
+    background: var(--c); color: #fff; font-size: 9.5pt; letter-spacing: .06em; white-space: nowrap;
+  }
+  .layer > h2 b { text-transform: uppercase; }
+  .layer > h2 span { font-weight: 500; font-size: 6.8pt; letter-spacing: 0; opacity: .95; overflow: hidden; text-overflow: ellipsis; }
+  .kb { position: relative; margin: 1.1mm auto .9mm; }
+
+  /* A key. --ks (set per keyboard drawing) scales its fonts; the joystick keys are smaller. */
+  .key {
+    --k: var(--ks); position: absolute; overflow: hidden;
+    background: #fff; border: .25mm solid color-mix(in srgb, var(--c) 55%, #94a3b8);
+    border-radius: 1.1mm; display: flex; align-items: center; justify-content: center;
+    text-align: center; line-height: 1.02;
+  }
+  .key .tap { font-weight: 700; font-size: calc(var(--f) * var(--k) * 1pt); }
+  .key.has-top  { padding-top: calc(2mm * var(--ks)); }
+  .key.has-hold { padding-bottom: calc(3.2mm * var(--ks)); }
+  .key.has-top.has-hold .tap { font-size: calc(min(var(--f), 9.5) * var(--ks) * 1pt); }
+  .key .cap, .key .sh { position: absolute; top: .25mm; line-height: 1; white-space: nowrap; }
+  .key .cap { left: .5mm; font-size: calc(4.6pt * var(--ks)); color: #475569; letter-spacing: -.01em; }
+  .key .sh  { right: .6mm; font-size: calc(6.4pt * var(--ks)); font-weight: 700; color: #475569; }
+  .key .hold {
+    position: absolute; left: 0; right: 0; bottom: 0; height: calc(3.2mm * var(--ks)); line-height: calc(3.2mm * var(--ks));
+    font-size: calc(7.6pt * var(--ks)); font-weight: 700; white-space: nowrap;
+    background: color-mix(in srgb, var(--c) 14%, #fff); color: #1e293b;
+  }
+  .key .hold.mod   { background: #1e293b; color: #fff; font-size: calc(9pt * var(--ks)); }
+  .key .hold.layer { background: var(--t); color: #fff; font-size: calc(6pt * var(--ks)); letter-spacing: .02em; }
+  .key .chip {
+    background: var(--t); color: #fff; border-radius: 3mm; padding: .5mm 1.1mm;
+    font-size: calc(6pt * var(--ks)); font-weight: 700; white-space: nowrap;
+  }
+  .key.none {
+    border-color: #cbd5e1;
+    background: repeating-linear-gradient(135deg, #e2e8f0 0 .35mm, #fff .35mm 1.1mm);
+  }
+  .key.ghost { opacity: .3; filter: grayscale(1); border-style: dashed; border-color: #64748b; }
+  .key.held { background: var(--c); border-color: var(--c); color: #fff; }
+  .key.held .hold { background: #0003; color: #fff; font-size: calc(5pt * var(--ks)); letter-spacing: .08em; }
+  .key.ring { box-shadow: 0 0 0 .45mm var(--c); border-color: var(--c); }
+
+  /* Joystick: five small keys in a cross. */
+  .key.mini { --k: .78; --ks: 1; border-radius: .9mm; flex-direction: column; gap: .2mm; }
+  .key.mini .sub { font-size: 4.4pt; color: #475569; white-space: nowrap; }
+  .tag { position: absolute; font-size: 4.4pt; line-height: 1.1; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+  .tag.note { color: var(--c); font-weight: 700; text-align: right; }
+
+  /* Encoder: a dial with the rotation labels on either side. */
+  .enc { position: absolute; display: flex; align-items: center; justify-content: space-between; }
+  .enc .side { width: 7.4mm; text-align: center; font-size: 5.4pt; font-weight: 700; line-height: 1.05; }
+  .enc .side.big { font-size: 8.5pt; }
+  .enc .side i { display: block; font-style: normal; font-size: 8pt; color: var(--c); line-height: 1; }
+  .enc .side.ghost, .enc .dial.ghost { opacity: .3; filter: grayscale(1); }
+  .enc .dial {
+    width: 9.6mm; height: 9.6mm; border-radius: 50%; flex: none;
+    border: .3mm solid color-mix(in srgb, var(--c) 55%, #94a3b8); box-shadow: inset 0 0 0 .7mm #fff, inset 0 0 0 .95mm #cbd5e1;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-weight: 700; line-height: 1; font-size: calc(var(--f) * .7pt);
+  }
+
+  /* Legend, combos and notes: a strip under the grid, or the last grid cell when it is free. */
+  .info section { overflow: hidden; }
+  .info h3 { margin: 0 0 .6mm; font-size: 6.4pt; text-transform: uppercase; letter-spacing: .08em; color: #475569; }
+  .info.strip { display: flex; gap: 2mm; flex: 1; min-height: 0; }
+  .info.strip section { border: .25mm solid #94a3b8; border-radius: 1.4mm; padding: 1mm 1.6mm; }
+  .info.strip .legend { flex: 0 0 99mm; }
+  .info.strip .combos { flex: 0 0 104mm; }
+  .info.strip .notes { flex: 1; }
+  .info.cell {
+    border: .25mm solid #94a3b8; border-radius: 1.4mm; padding: 2mm 3mm; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between; zoom: 1.1; contain: size;
+  }
+  .legend .items { display: flex; gap: 1.4mm; }
+  .legend .item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .6mm; font-size: 5.3pt; line-height: 1.12; text-align: center; }
+  .legend .key { position: relative; flex: none; --c: #2563eb; }
+  .combos ul { margin: 0; padding: 0; list-style: none; display: grid; grid-auto-flow: column; grid-template-rows: repeat(4, auto); justify-content: space-between; column-gap: 3mm; font-size: 6.8pt; line-height: 1.55; }
+  .combos li { white-space: nowrap; break-inside: avoid; }
+  .combos kbd { font: inherit; font-weight: 700; background: #e2e8f0; border-radius: .7mm; padding: 0 .8mm; }
+  .combos em { font-style: normal; font-size: 5.2pt; color: #64748b; }
+  .combos b { color: var(--t, inherit); }
+  .notes ul { margin: 0; padding-left: 2.6mm; font-size: 5.7pt; line-height: 1.2; }
+  .notes li { margin-bottom: .3mm; }

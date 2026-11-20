@@ -66,7 +66,7 @@
             mods = <(MOD_RSFT)>;
         };
 
-        // Morphs LSHIFT + EQUAL into F4
+        // tap: EQUAL | hold: F2 | either SHIFT + tap: F4
         equal_f2_f4: equal_f2_f4 {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -75,7 +75,7 @@
             keep-mods = <(MOD_RSFT)>;
         };
 
-        // Morphs LSHIFT + DOT into COLON
+        // Morphs either SHIFT + DOT into COLON
         dot_colon: dot_colon {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -84,7 +84,7 @@
             keep-mods = <(MOD_RSFT)>;
         };
 
-        // Morphs LSHIFT + COMA into SEMI
+        // Morphs either SHIFT + COMA into SEMI
         coma_semi: coma_semi {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;

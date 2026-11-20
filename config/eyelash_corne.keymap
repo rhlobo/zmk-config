@@ -1,101 +1,193 @@
-// TEMPORARY (EYELASH_PLAN.md Phase 0 step 2): the vendor's pre-Dev1 keymap from
-// a741725193/zmk-new_corne at a7d9308 (config/eyelash_corne.keymap), with RGB, soft-off and
-// ZMK Studio bindings removed (replaced by &none). Replaced by the composed keymap in Phase 2.
-
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25   // 10
-
-#include <input/processors.dtsi>
-#include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/outputs.h>
-#include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/bt.h>         // Bluetooth Command Defines
+#include <dt-bindings/zmk/keys.h>       // Keycode Defines
+#include <dt-bindings/zmk/ext_power.h>  // Power Management Behaviors
+#include "mouse.dtsi"                   // Mouse emulation tuning and movement/scroll defines
+#include "eyelash_corne_positions.dtsi" // Named key positions used by combos
+#include "unicode.dtsi"                 // UNICODE_MACRO() helper for Ctrl+Shift+U input
+#include "layers.dtsi"                  // Layer indices and the shared row macros (the layout)
 
-&mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
+#include "behaviors.dtsi"               // Shared hold-taps and mod-morphs
+#include "macros.dtsi"                  // Shared macros
+#include "combos.dtsi"                  // Shared combos
 
-&msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
+// Eyelash-only layer: keys for sim racing (Assetto Corsa, Le Mans Ultimate, SimHub). The corne
+// has no key that reaches it, so it is defined here rather than in layers.dtsi.
+#define LSIM 5
 
-&msc {
-    acceleration-exponent = <1>;      // 0
-    time-to-max-speed-ms = <100>;       // 300
-    delay-ms = <0>;                   // 0
-};
+// Encoder scroll speed in units per second; see enc_msc below.
+#define ENC_SCRL_VAL 400
 
-&mmv {
-    time-to-max-speed-ms = <500>;
-    acceleration-exponent = <1>;
-    trigger-period-ms = <16>;
-};
-
+// The 42 shared keys come from layers.dtsi. Each layer here adds the Eyelash's own slots, in
+// the order of the vendor's matrix transform (see eyelash_corne_positions.dtsi):
+//
+//     <left outer>  <P>_L1  <joystick up>                     <P>_R1  <right outer>
+//     <left outer>  <P>_L2  <joy left> <joy press> <joy right> <P>_R2  <right outer>
+//     <left outer>  <P>_L3  <encoder push> <joystick down>    <P>_R3  <right outer>
+//                   <P>_T
+//
+// Outer keys and joystick per layer (Windows shortcuts; this board is used mostly on a
+// Windows 11 sim rig):
+//
+//   Layer    Left outer (top/mid/bottom)    Right outer (top/mid/bottom)        Joystick                               Encoder (rotate / push)
+//   Base     -  -  -                        SIM on/off, Alt+Tab, Win+E          mouse move, press = click, Shift = right click   vertical scroll / middle click
+//   Move     (Base)                         lock Base, lock Move, lock Numeric  Alt+Tab cycling (down/up), press = Task View or pick window,
+//                                                                               left/right = previous/next virtual desktop       horizontal scroll / right click
+//   Symbol   (Base)                         Game Bar: save 30 s, record, shot   Win+arrows: snap left/right, maximize, restore;
+//                                                                               press = snap layouts (Win+Z)                     volume / mute
+//   Numeric  (Base)                         \, types "h43", types "m1n"         (Base)                                           (Base) / keypad Enter
+//   System   Win+P, (Base), Win+I           Win+Ctrl+Shift+B, Win+X, Alt+F4     media: volume up/down, prev/next, play/pause     brightness / lock (Win+L)
+//   Sim      (Base)                         SIM on/off, F23, keypad 5           arrows, press = Enter                            Ctrl+F13/F14 / Ctrl+F15
 / {
     behaviors {
-        td0: td0 {
-            compatible = "zmk,behavior-tap-dance";
-            display-name = "Shift/Caps Lock Tap Dance";
+        // Joystick press on Base: left click, right click while Shift is held (ENTER thumb hold)
+        joy_click: joy_click {
+            compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
-            bindings = <&kp LEFT_SHIFT>, <&kp CAPS>;
+            bindings = <&mkp LCLK>, <&mkp RCLK>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // Alt+Tab cycling on the Move layer: down/up press Alt (and keep it pressed) and step
+        // through the window switcher; the joystick press releases Alt, which picks the window.
+        // With Alt not held, the press opens Task View (Win+Tab) instead.
+        alt_on: alt_on {
+            compatible = "zmk,behavior-key-toggle";
+            #binding-cells = <1>;
+            toggle-mode = "on";
+        };
+        alt_off: alt_off {
+            compatible = "zmk,behavior-key-toggle";
+            #binding-cells = <1>;
+            toggle-mode = "off";
+        };
+        joy_task: joy_task {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp LG(TAB)>, <&alt_off LALT>;
+            mods = <(MOD_LALT)>;
+        };
+
+        // Encoder scrolling uses its own scroll device, not &msc: without smooth scrolling &msc
+        // ramps up over 3 s (see mouse.dtsi), and a short encoder tap scrolled less than one wheel
+        // step, which was dropped. enc_msc never ramps. With smooth scrolling the host counts
+        // 16 units per wheel notch: ENC_SCRL_VAL (400 units/s) in 10 ms ticks is 4 units per tick,
+        // and each detent holds it for 4 ticks (tap-ms 45), so one detent = one notch, sent in
+        // four small steps. Hosts without high-resolution scrolling (macOS) would see 16 notches.
+        enc_msc: enc_mouse_scroll {
+            compatible = "zmk,behavior-input-two-axis";
+            #binding-cells = <1>;
+            x-input-code = <INPUT_REL_HWHEEL>;
+            y-input-code = <INPUT_REL_WHEEL>;
+            trigger-period-ms = <10>;
+            time-to-max-speed-ms = <0>;
+            acceleration-exponent = <0>;
+        };
+
+        // Encoder rotation
+        enc_scroll_v: enc_scroll_v {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&enc_msc MOVE_Y(-ENC_SCRL_VAL)>, <&enc_msc MOVE_Y(ENC_SCRL_VAL)>;
+            tap-ms = <45>;
+        };
+        enc_scroll_h: enc_scroll_h {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&enc_msc MOVE_X(ENC_SCRL_VAL)>, <&enc_msc MOVE_X(-ENC_SCRL_VAL)>;
+            tap-ms = <45>;
         };
     };
 
-    scroll_encoder: scroll_encoder {
-        compatible = "zmk,behavior-sensor-rotate";
-        #sensor-binding-cells = <0>;
-        bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+    enc_msc_input_listener: enc_msc_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&enc_msc>;
+    };
 
-        tap-ms = <100>;
+    macros {
+        joy_win_next: joy_win_next {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &alt_on LALT &kp TAB>;
+        };
+        joy_win_prev: joy_win_prev {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &alt_on LALT &kp LS(TAB)>;
+        };
     };
 
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
-            display-name = "QWERTY";
+            display-name = "Base";
             bindings = <
-&kp TAB    &kp Q  &kp W  &kp E     &kp R  &kp T                               &kp UP                &kp Y        &kp U  &kp I      &kp O    &kp P     &kp BSPC
-&td0       &kp A  &kp S  &kp D     &kp F  &kp G                     &kp LEFT  &kp ENTER  &kp RIGHT  &kp H        &kp J  &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LCTRL  &kp Z  &kp X  &kp C     &kp V  &kp B        &kp SPACE              &kp DOWN              &kp N        &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp ESC
-                         &kp LGUI  &mo 1  &lt 3 SPACE                                               &lt 3 ENTER  &mo 2  &kp RALT
+&none   BASE_L1                       &mmv MOVE_UP                         BASE_R1   &tog LSIM
+&none   BASE_L2   &mmv MOVE_LEFT      &joy_click      &mmv MOVE_RIGHT      BASE_R2   &kp LA(TAB)
+&none   BASE_L3   &mkp MCLK           &mmv MOVE_DOWN                       BASE_R3   &kp LG(E)
+        BASE_T
             >;
-
-            sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOL_DN>;
+            sensor-bindings = <&enc_scroll_v>;
         };
 
-        lower_layer {
-            display-name = "NUMBER";
+        nav_layer {
+            display-name = "Move";
             bindings = <
-&trans  &kp N1           &kp N2          &kp N3        &kp N4        &kp N5                                         &mmv MOVE_UP                     &kp N6           &kp N7           &kp N8           &kp N9           &kp N0    &kp BSPC
-&trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3                   &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp HOME  &kp PG_UP
-&trans  &none  &none  &trans        &trans        &none  &kp C_MUTE                    &mmv MOVE_DOWN                   &none  &none  &none  &none  &kp END   &kp PG_DN
-                                         &trans        &trans        &trans                                                                          &kp INS          &kp DEL          &trans
+&trans  NAV_L1                        &joy_win_prev                        NAV_R1    &to LDEF
+&trans  NAV_L2    &kp LG(LC(LEFT))    &joy_task       &kp LG(LC(RIGHT))    NAV_R2    &to LNAV
+&trans  NAV_L3    &mkp RCLK           &joy_win_next                        NAV_R3    &to LNUM
+        NAV_T
             >;
-
-            sensor-bindings = <&scroll_encoder>;
+            sensor-bindings = <&enc_scroll_h>;
         };
 
-        raise_layer {
-            display-name = "SYMBOL";
+        symbol_layer {
+            display-name = "Symbol";
             bindings = <
-&trans  &kp EXCL      &kp AT        &kp HASH   &kp DLLR   &kp PRCNT                            &mmv MOVE_UP                     &kp CARET  &kp AMPS   &kp ASTRK  &kp LPAR  &kp RPAR  &kp BSPC
-&trans  &bt BT_CLR    &mkp LCLK     &mkp MCLK  &mkp RCLK  &mkp MB4             &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp MINUS  &kp EQUAL  &kp LBKT   &kp RBKT  &kp BSLH  &kp GRAVE
-&trans  &out OUT_USB  &out OUT_BLE  &none      &none      &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp UNDER  &kp PLUS   &kp LBRC   &kp RBRC  &kp PIPE  &kp TILDE
-                                    &trans     &trans     &kp SPACE                                                             &kp RET    &trans     &trans
+&trans  SYM_L1                        &kp LG(UP)                           SYM_R1    &kp LG(LA(G))
+&trans  SYM_L2    &kp LG(LEFT)        &kp LG(Z)       &kp LG(RIGHT)        SYM_R2    &kp LG(LA(R))
+&trans  SYM_L3    &kp C_MUTE          &kp LG(DOWN)                         SYM_R3    &kp LG(LA(PSCRN))
+        SYM_T
             >;
-
-            sensor-bindings = <&scroll_encoder>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
-        layer_3 {
-            display-name = "Fn";
+        numerical_layer {
+            display-name = "Numeric";
             bindings = <
-&none  &kp F1      &kp F2     &kp F3       &kp F4     &kp F5                                  &mmv MOVE_UP                     &kp F6       &kp F7     &kp F8       &kp F9      &kp F10          &kp F11
-&trans          &trans      &mkp LCLK  &mkp MCLK    &mkp RCLK  &mkp MB4                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &bootloader  &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12
-&trans          &sys_reset  &trans     &bootloader  &trans     &mkp MB5  &kp C_MUTE                    &mmv MOVE_DOWN                   &trans       &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK
-                                       &trans       &trans     &trans                                                                   &trans       &trans     &trans
+&trans  NUM_L1                        &trans                               NUM_R1    &kp BSLH
+&trans  NUM_L2    &trans              &trans          &trans               NUM_R2    &type_h43
+&trans  NUM_L3    &kp KP_ENTER        &trans                               NUM_R3    &type_m1n
+        NUM_T
             >;
+        };
 
-            sensor-bindings = <&scroll_encoder>;
+        system_layer {
+            display-name = "System";
+            bindings = <
+&kp LG(P)  SYS_L1                     &kp C_VOL_UP                         SYS_R1    &kp LG(LC(LS(B)))
+&trans     SYS_L2 &kp C_PREV          &kp C_PP        &kp C_NEXT           SYS_R2    &kp LG(X)
+&kp LG(I)  SYS_L3 &kp LG(L)           &kp C_VOL_DN                         SYS_R3    &kp LA(F4)
+           SYS_T
+            >;
+            sensor-bindings = <&inc_dec_kp C_BRI_UP C_BRI_DN>;
+        };
+
+        // SIM: toggled on and off by the right outer top key. The left half stays Base (chat,
+        // menus); the right half sends keys meant to be bound in the sim or in SimHub. F13-F24
+        // are used by nothing else in Windows, so they never clash with a game's defaults. The
+        // encoder sends Ctrl+F13 / Ctrl+F14 (rotate) and Ctrl+F15 (push), e.g. for traction
+        // control or brake bias.
+        sim_layer {
+            display-name = "Sim";
+            bindings = <
+&trans  &trans &trans &trans &trans &trans    &kp UP                     &kp F13   &kp F14   &kp F15   &kp F16   &kp F17   &tog LSIM
+&trans  &trans &trans &trans &trans &trans    &kp LEFT  &kp ENTER  &kp RIGHT    &kp F18   &kp F19   &kp F20   &kp F21   &kp F22   &kp F23
+&trans  &trans &trans &trans &trans &trans    &kp LC(F15) &kp DOWN             &kp F24   &kp KP_N1 &kp KP_N2 &kp KP_N3 &kp KP_N4 &kp KP_N5
+        &trans &trans &trans    &trans &trans &trans
+            >;
+            sensor-bindings = <&inc_dec_kp LC(F13) LC(F14)>;
         };
     };
 };

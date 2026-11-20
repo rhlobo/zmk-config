@@ -1,9 +1,11 @@
 # LOBO's Corne — ZMK config
 
-Personal [ZMK](https://zmk.dev) firmware configuration for a 42-key Corne split keyboard
-running on nice!nano v2 controllers with nice!view displays. Support for a second keyboard,
-the Eyelash Peripherals Corne, is being added from the same layout; see
-[`EYELASH_PLAN.md`](EYELASH_PLAN.md).
+Personal [ZMK](https://zmk.dev) firmware configuration for two split keyboards sharing one
+layout: a 42-key Corne on nice!nano v2 controllers with nice!view displays, and an Eyelash
+Peripherals Corne (48 positions: the same 42 keys plus outer columns, a five-way joystick and an
+encoder), whose board definition comes from the vendor (see [GitHub Actions](#github-actions)).
+The Eyelash is not compatible with the standard corne shield. The plan behind the second
+keyboard is in [`EYELASH_PLAN.md`](EYELASH_PLAN.md).
 
 The firmware is built from upstream ZMK, pinned to the `v0.3` branch in
 [`config/west.yml`](config/west.yml), the only place a revision is written. CI and the
@@ -52,9 +54,45 @@ default_layer {
 To change a binding, edit the macro and its diagram in `layers.dtsi`; never copy a row, behavior,
 macro or combo into a keyboard's keymap.
 
+### Cheat sheets
+
+[`docs/corne-cheatsheet.html`](docs/corne-cheatsheet.html) and
+[`docs/eyelash-cheatsheet.html`](docs/eyelash-cheatsheet.html) draw every layer on one A4
+landscape page. They follow the same split as the firmware: the labels of the 42 shared keys and
+the combos are written once in [`docs/cheatsheet/shared-layout.js`](docs/cheatsheet/shared-layout.js),
+and each HTML file holds only its keyboard's own slots (outer columns, joystick, encoder, Sim
+layer). After changing `layers.dtsi` or `combos.dtsi`, update `shared-layout.js`; after changing
+a keymap's own slots, update the data block in that keyboard's HTML file. The label syntax is
+described at the top of `shared-layout.js`.
+
+### Eyelash extras
+
+The Eyelash keymap composes the same layers and adds its own keys around them. A comment table
+at the top of [`config/eyelash_corne.keymap`](config/eyelash_corne.keymap) lists them per layer.
+The shortcuts are for Windows, where this keyboard is mostly used (a sim rig).
+
+- **Outer columns:** on Base, the right column toggles the Sim layer (the same key turns it
+  off), sends Alt+Tab once, and opens Explorer (Win+E). Move locks Base, Move or Numeric;
+  Symbol has Game Bar capture keys; Numeric has `\` and two typed-text macros; System has
+  Windows tools (display mode, Settings, graphics-driver reset, Win+X, Alt+F4).
+- **Joystick:** mouse movement on Base (press = left click, Shift + press = right click).
+  On Move: down/up cycle windows like Alt+Tab, with Alt kept held; the press switches to the
+  highlighted window, or opens Task View (Win+Tab) when not cycling; left/right switch virtual
+  desktops. On Symbol: Win+arrows to snap, maximize and restore windows, press = snap layouts.
+  On System: media keys. On Sim: arrow keys and Enter.
+- **Encoder:** one detent scrolls one notch. Vertical scroll on Base (push = middle click),
+  horizontal scroll on Move (push = right click), volume on Symbol (push = mute), brightness on
+  System (push = lock, Win+L). On Numeric the push is keypad Enter; on Sim the encoder sends
+  Ctrl+F13 / Ctrl+F14 and the push Ctrl+F15, for the sim to bind.
+- **Sim layer** (Eyelash only, index 5): the left half stays Base; the right half sends
+  F13–F24 and keypad 1–5, keys meant to be bound in the sim or in SimHub.
+
+After cycling windows on Move, press the joystick before leaving the layer. Otherwise Alt
+stays held and changes the next keys you type.
+
 ### Combos
 
-Defined in [`config/combos.dtsi`](config/combos.dtsi). All layer combos use the left inner
+Defined in [`config/combos.dtsi`](config/combos.dtsi). All layer combos use the left outer
 thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the right outer thumb key on that layer to return to Base.
 
 | Keys                  | Action                                  |
@@ -75,14 +113,17 @@ thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the ri
 | [`config/layers.dtsi`](config/layers.dtsi)      | Shared layout: layer indices, diagrams and row macros           |
 | [`config/corne.keymap`](config/corne.keymap)    | Corne keymap: composes the layers, adds the outer columns       |
 | [`config/behaviors.dtsi`](config/behaviors.dtsi) | Shared hold-taps and mod-morphs                                |
-| [`config/macros.dtsi`](config/macros.dtsi)      | Shared macros (nvim, ç workaround, Unicode symbols)             |
+| [`config/macros.dtsi`](config/macros.dtsi)      | Shared macros (nvim, ç workaround, typed text, Unicode symbols) |
 | [`config/combos.dtsi`](config/combos.dtsi)      | Shared combos, written against the `KL..`/`KR..` aliases        |
 | [`config/corne_positions.dtsi`](config/corne_positions.dtsi) | Corne key-position aliases (`KL11`…`KR43`) used by combos |
 | [`config/mouse.dtsi`](config/mouse.dtsi)        | Mouse acceleration profiles and movement/scroll defines         |
 | [`config/unicode.dtsi`](config/unicode.dtsi)    | `UNICODE_MACRO()` helper: types a code point via Ctrl+Shift+U   |
-| [`config/corne.conf`](config/corne.conf)        | Kconfig options, with most options documented inline            |
-| [`config/eyelash_corne.keymap`](config/eyelash_corne.keymap) | Eyelash Corne keymap; temporarily the vendor's, see [`EYELASH_PLAN.md`](EYELASH_PLAN.md) |
-| [`config/eyelash_corne.conf`](config/eyelash_corne.conf) | Eyelash Corne Kconfig (temporary, minimal; backlight on, which the screens need) |
+| [`config/corne.conf`](config/corne.conf)        | Corne Kconfig, with most options documented inline              |
+| [`config/eyelash_corne.keymap`](config/eyelash_corne.keymap) | Eyelash keymap: composes the layers, adds the outer columns, joystick, encoder and Sim layer |
+| [`config/eyelash_corne.conf`](config/eyelash_corne.conf) | Eyelash Kconfig: twin of `corne.conf`, plus the backlight the screens need |
+| [`config/eyelash_corne_positions.dtsi`](config/eyelash_corne_positions.dtsi) | Eyelash key-position aliases, plus the joystick and encoder-push slots |
+| [`docs/corne-cheatsheet.html`](docs/corne-cheatsheet.html), [`docs/eyelash-cheatsheet.html`](docs/eyelash-cheatsheet.html) | One-page cheat sheet of every layer, one per keyboard. Print: browser → Print → A4 landscape, no headers/footers, background graphics on |
+| [`docs/cheatsheet/`](docs/cheatsheet/) | What the two sheets share: `shared-layout.js` (labels of the 42 shared keys, combos, legend) and the drawing code (`sheet.js`, `sheet.css`) |
 | [`config/west.yml`](config/west.yml)            | West manifest: ZMK and Eyelash board revisions, used by CI and the devcontainer |
 | [`build.yaml`](build.yaml)                      | Board/shield matrix for GitHub Actions and `bin/build-corne`    |
 | [`bin/build-corne`](bin/build-corne)            | Local build script: builds every `build.yaml` entry             |
@@ -96,10 +137,14 @@ thumb (TAB) plus one other thumb key and lock the layer with `&to`. Press the ri
 
 ## Notable firmware settings
 
-From [`config/corne.conf`](config/corne.conf):
+From [`config/corne.conf`](config/corne.conf). [`config/eyelash_corne.conf`](config/eyelash_corne.conf)
+is its twin: only the keyboard name (`Eyelash-Corne`) and the backlight block differ, so change
+both files together.
 
 - Key debounce of 1 ms on press and 7 ms on release.
 - Mouse emulation enabled; acceleration is tuned in `config/mouse.dtsi`.
+- Smooth (high-resolution) scrolling, supported by Windows and Linux but not macOS. Scroll
+  speeds are tuned for it.
 - Inverted nice!view display.
 - Bluetooth transmit power raised by 8 dBm and 2M PHY disabled, trading battery for range.
 - Idle after 60 s, deep sleep after 5 h.
@@ -146,9 +191,12 @@ devcontainer exec --workspace-folder . bin/build-corne
 
 ### Flashing
 
-Double-tap the reset button on a nice!nano to enter the bootloader, then copy the matching
-`.uf2` onto the USB drive that appears. Flash the left half first; it is the central side.
-Use the `settings_reset` image on both halves if they stop pairing with each other.
+Both keyboards flash the same way. Double-tap the reset button on a half to enter the
+bootloader, then copy the matching `.uf2` onto the `NICENANO` USB drive that appears. Flash
+the left half first; it is the central side on both keyboards. If the halves stop pairing with
+each other, flash the keyboard's `settings_reset` image on both halves, then the normal images
+again: `nice_nano_v2-settings_reset` for the corne, `eyelash_corne_left-settings_reset` for
+the Eyelash.
 
 ## Development notes
 

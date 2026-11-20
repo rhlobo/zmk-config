@@ -23,6 +23,20 @@
             bindings = <&macro_tap &kp ESC &kp COLON &kp Q &kp EXCLAMATION &kp ENTER>;
         };
 
+        // Macro: types "h43"
+        type_h43: type_h43 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp H &kp N4 &kp N3>;
+        };
+
+        // Macro: types "m1n"
+        type_m1n: type_m1n {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp M &kp N1 &kp N>;
+        };
+
         // Unicode symbols (see unicode.dtsi)
         UNICODE_MACRO(u_emdash, N2, N0, N1, N4)     // U+2014 em dash
         UNICODE_MACRO(u_middot, B, N7)              // U+00B7 middle dot

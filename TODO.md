@@ -124,4 +124,4 @@ tasks_version: "0.4"
 ## Firmware
 
 - [ ] **Scroll keys** — the Move layer lost its scroll keys (and WIN+S) when row 1 became mouse click and movement on 2026-11-17, so the corne has no way to scroll. Find them a place in `config/layers.dtsi`; the Eyelash will also scroll with its encoder (Eyelash plan, Phase 3). #P2
-- [ ] **Smooth scrolling** — enable `CONFIG_ZMK_POINTING_SMOOTH_SCROLLING` (high-resolution scroll) in both `config/corne.conf` and `config/eyelash_corne.conf`, then retune the scroll values in `config/mouse.dtsi`, since the option changes the scroll scale. Do it after the Eyelash plan's Phase 3, so the eyelash encoder scrolling is tuned at the same time. Check on the Arch machine; macOS support is weaker. #P3
+- [x] **Smooth scrolling** — enable `CONFIG_ZMK_POINTING_SMOOTH_SCROLLING` (high-resolution scroll) in both `config/corne.conf` and `config/eyelash_corne.conf`, then retune the scroll values in `config/mouse.dtsi`, since the option changes the scroll scale. Do it after the Eyelash plan's Phase 3, so the eyelash encoder scrolling is tuned at the same time. Check on the Arch machine; macOS support is weaker. (done 2026-11-20) #P3

@@ -10,6 +10,11 @@
 //     <outer>  <P>_L3  <P>_R3  <outer>        T: the six thumb keys, left to right.
 //              <P>_T
 //
+// Reading the diagrams: a cell with two legends is "tap hold" (S ALT, ( ), ESC NUM), except the
+// Base mod-morphs ' " and , ; and . : which are "tap shifted"; = F2 is tap =, hold F2, Shift F4.
+// ███ marks the thumb key held to reach the layer. →BASE is &to LDEF, which leaves a locked
+// layer; on System that same key is the held one, so its cell shows ███.
+//
 // Must be included before behaviors.dtsi and combos.dtsi, which use the layer indices.
 
 #define LDEF 0
@@ -21,9 +26,9 @@
 // BASE ----------------------------------------------------------------------------------------
 //       -------------------------------------------------------------     -------------------------------------------------------------
 //       |     Q     |     W     |     E     |     R     |     T     |     |     Y     |     U     |     I     |     O     |     P     |
-//       |     A     |     S     |     D     |     F     |     G     |     |     H     |     J     |     K     |     L     |    ' "    |
+//       |     A     |   S ALT   |   D WIN   |   F CTRL  |  G SHIFT  |     |  H SHIFT  |   J CTRL  |   K WIN   |   L ALT   |    ' "    |
 //       |     Z     |     X     |     C     |     V     |     B     |     |     N     |     M     |    = F2   |    , ;    |    . :    |
-//       ------------------------|    TAB    |   ENTER   |    ESC    |     |    BSPC   |   SPACE   |   CAPSW   |------------------------
+//       ------------------------|    TAB    |ENTER SHIFT|  ESC NUM  |     | BSPC MOVE | SPACE SYM | RCTRL SYS |------------------------
 //                               -------------------------------------     -------------------------------------
 #define BASE_L1 &kp Q        &kp W        &kp E        &kp R         &kp T
 #define BASE_R1 &kp Y        &kp U        &kp I        &kp O         &kp P
@@ -38,7 +43,7 @@
 //       |  R CLICK  |   M LEFT  |   M DOWN  |    M UP   |  M RIGHT  |     |    HOME   |    PgDn   |    PgUp   |    END    |     ≣     |
 //       |  ALT+TAB  |           |           |           |           |     |    LEFT   |    DOWN   |     UP    |   RIGHT   |   ENTER   |
 //       |    UNDO   |    CUT    |    COPY   |   PASTE   |    REDO   |     |     ←     |     ↓     |     ↑     |     →     |     ↳     |
-//       ------------------------|           |           |           |     |███████████|           |           |------------------------
+//       ------------------------|           |           |           |     |███████████|           |   →BASE   |------------------------
 //                               -------------------------------------     -------------------------------------
 #define NAV_L1 &mkp RCLK       &mmv MOVE_LEFT    &mmv MOVE_DOWN    &mmv MOVE_UP    &mmv MOVE_RIGHT
 #define NAV_R1 &kp HOME        &kp PG_DN         &kp PG_UP         &kp END         &kp K_CMENU
@@ -50,10 +55,10 @@
 
 // SYMBOL --------------------------------------------------------------------------------------
 //       -------------------------------------------------------------     -------------------------------------------------------------
-//       |    ` ^    |     !     |     @     |     #     |     $     |     |     ⚠     |     ✅    |     ❌    |     *     |    / \    |
+//       |    ^ `    |     !     |     @     |     #     |     $     |     |     ⚠     |     ✅    |     ❌    |     *     |    / \    |
 //       |     ~     |     ?     |     _     |    ( )    |    [ ]    |     |           |           |           |     +     |     -     |
 //       |     &     |     %     |     |     |    < >    |    { }    |     |     ·     |     —     |     ⇒     |     ;     |     :     |
-//       ------------------------|           |           |           |     |           |███████████|           |------------------------
+//       ------------------------|           |           |           |     |           |███████████|   →BASE   |------------------------
 //                               -------------------------------------     -------------------------------------
 #define SYM_L1 &cht GRAVE CARET  &kp EXCL   &kp AT     &kp HASH        &kp DOLLAR
 #define SYM_R1 &u_warning        &u_check   &u_cross   &kp ASTRK       &cht BSLH KP_SLASH
@@ -68,7 +73,7 @@
 //       |  ESC :q!  |  ESC :w   |           |           |           |     |     7     |     8     |     9     |     *     |    / \    |
 //       |           |           |           |           |           |     |     4     |     5     |     6     |     +     |     -     |
 //       |           |           |           |           |           |     |     1     |     2     |     3     |           |           |
-//       ------------------------|           |           |███████████|     |     0     |           |           |------------------------
+//       ------------------------|           |           |███████████|     |     0     |           |   →BASE   |------------------------
 //                               -------------------------------------     -------------------------------------
 #define NUM_L1 &nvim_quit  &nvim_save  &trans  &trans     &trans
 #define NUM_R1 &kp N7      &kp N8      &kp N9  &kp ASTRK  &cht BSLH SLASH

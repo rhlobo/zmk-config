@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Corne cheat sheet</title>
+<!--
+  One-page cheat sheet of every layer of the Corne.
+  Print: browser → Print → A4, landscape, no headers/footers, background graphics on.
+
+  Labels of the 42 shared keys, the combos and the legend: cheatsheet/shared-layout.js
+  (used by both keyboards' sheets). This keyboard's own slots: the data block below.
+  Drawing code: cheatsheet/sheet.js and cheatsheet/sheet.css. Keep the cheatsheet/ folder
+  next to this file.
+-->
+<link rel="stylesheet" href="cheatsheet/sheet.css">
+<script src="cheatsheet/shared-layout.js"></script>
+
+<!-- ═══════════════════════════════ DATA: this keyboard's own slots ═══════════════════════════════ -->
+<script>
+// Mirrors config/corne.keymap, which adds only the outer columns to the shared layers, and
+// they are &trans on every layer. A layer left out here gets &trans outer columns, so there is
+// nothing to list. If an outer key gets a binding, add it per layer id (base, nav, sym, num,
+// sys), with the key label syntax described in cheatsheet/shared-layout.js:
+//
+//   layers: { base: { outerL: ['⎋', __, __], outerR: [__, __, __] } },
+const KEYBOARD = {
+  title: 'Corne · layers',
+  layers: {},
+
+  // Added after the shared notes.
+  notes: [
+    'The outer columns are unused on every layer.',
+    'Mouse: the Move layer moves the pointer and clicks; there are no scroll keys yet.',
+  ],
+};
+</script>
+</head>
+<body>
+<div class="page" id="page"></div>
+<script src="cheatsheet/sheet.js"></script>
+</body>
+</html>

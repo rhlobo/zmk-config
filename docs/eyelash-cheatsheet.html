@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Eyelash Corne cheat sheet</title>
+<!--
+  One-page cheat sheet of every layer of the Eyelash Corne.
+  Print: browser → Print → A4, landscape, no headers/footers, background graphics on.
+
+  Labels of the 42 shared keys, the combos and the legend: cheatsheet/shared-layout.js
+  (used by both keyboards' sheets). This keyboard's own slots: the data block below.
+  Drawing code: cheatsheet/sheet.js and cheatsheet/sheet.css. Keep the cheatsheet/ folder
+  next to this file.
+-->
+<link rel="stylesheet" href="cheatsheet/sheet.css">
+<script src="cheatsheet/shared-layout.js"></script>
+
+<!-- ═══════════════════════════════ DATA: this keyboard's own slots ═══════════════════════════════ -->
+<script>
+// Mirrors config/eyelash_corne.keymap. The key label syntax is described in
+// cheatsheet/shared-layout.js. Per layer id (base, nav, sym, num, sys):
+//   outerL, outerR: the outer column keys, top to bottom
+//   joy:            joystick up/left/press/right/down, plus a one-word note
+//   enc:            encoder: ccw (↺), push, cw (↻)
+//   reach:          replaces the shared title text when this keyboard has more ways in
+// extraLayers: whole layers only this keyboard has, in the shared-layout.js format plus the
+// fields above.
+const KEYBOARD = {
+  title: 'Eyelash Corne · layers',
+
+  layers: {
+    base: {
+      outerL: [XX, XX, XX],
+      outerR: ['@sim cap:on/off', '⌥⇥', '⊞E cap:files'],
+      joy: { note: 'mouse', up: '▲', left: '◀', press: 'click shift:right', right: '▶', down: '▼' },
+      enc: { ccw: 'scroll ↑', push: 'click', cw: 'scroll ↓' },
+    },
+    nav: {
+      reach: 'hold ⌫ · lock: ⇥ + ⌫, or the right outer middle key here',
+      outerL: [__, __, __],
+      outerR: ['@base cap:lock', '@nav cap:lock', '@num cap:lock'],
+      joy: { note: 'windows', up: '⌥⇧⇥', left: '⊞⌃←', press: '⊞⇥', right: '⊞⌃→', down: '⌥⇥' },
+      enc: { ccw: 'scroll ←', push: 'R click', cw: 'scroll →' },
+    },
+    sym: {
+      outerL: [__, __, __],
+      outerR: ['⊞⌥G cap:clip 30s', '⊞⌥R cap:record', '⊞⌥ PrtSc cap:shot'],
+      joy: { note: 'snap', up: '⊞↑', left: '⊞←', press: '⊞Z', right: '⊞→', down: '⊞↓' },
+      enc: { ccw: '🔉', push: '🔇', cw: '🔊' },
+    },
+    num: {
+      reach: 'hold ⎋ · lock: ⇥ + ⎋, or the right outer bottom key on Move',
+      outerL: [__, __, __],
+      outerR: ['\\', 'h43 cap:types', 'm1n cap:types'],
+      joy: { note: '', up: __, left: __, press: __, right: __, down: __ },
+      enc: { ccw: __, push: __, cw: __ },
+    },
+    sys: {
+      outerL: ['⊞P cap:display', __, '⊞I cap:settings'],
+      outerR: ['⊞⌃⇧B cap:gfx reset', '⊞X', '⌥F4 cap:close'],
+      joy: { note: 'media', up: '🔊', left: '⏮', press: '⏯', right: '⏭', down: '🔉' },
+      enc: { ccw: '☀−', push: __, cw: '☀+' },
+    },
+  },
+
+  extraLayers: [
+    {
+      id: 'sim', name: 'Sim', short: 'Sim', color: '#be123c',
+      reach: 'toggle: right outer top key on Base (same key turns it off) · left half stays Base',
+      outerL: [__, __, __],
+      left: [
+        [__, __, __, __, __],
+        [__, __, __, __, __],
+        [__, __, __, __, __],
+      ],
+      right: [
+        ['F13', 'F14', 'F15', 'F16', 'F17'],
+        ['F18', 'F19', 'F20', 'F21', 'F22'],
+        ['F24', 'KP1', 'KP2', 'KP3', 'KP4'],
+      ],
+      outerR: ['@sim cap:on/off', 'F23', 'KP5'],
+      thumbs: [__, __, __,     __, __, __],
+      joy: { note: 'arrows', up: '↑', left: '←', press: '⏎', right: '→', down: '↓' },
+      enc: { ccw: __, push: __, cw: __ },
+    },
+  ],
+
+  // Added after the shared notes.
+  notes: [
+    'On Base, ⇧ + joystick press = right click. Dial: ↺ ↻ rotate, centre = push.',
+    'Move joystick ↑/↓ cycles windows and keeps ⌥ held: press it to pick one before leaving Move. When not cycling, press = Task View.',
+  ],
+};
+</script>
+</head>
+<body>
+<div class="page" id="page"></div>
+<script src="cheatsheet/sheet.js"></script>
+</body>
+</html>
