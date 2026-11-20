@@ -29,8 +29,10 @@ Agreed while carrying out steps 6–8, which were done together in one change:
   index 5, toggled by the right outer top key on Base) are in scope. The bindings are listed in
   the comment table at the top of `config/eyelash_corne.keymap` and in the README.
 - Encoder, replacing section 3.5: Base vertical scroll, push = middle click; Move horizontal
-  scroll, push = right click; Symbol volume, push = mute; System brightness, push = lock (Win+L);
-  Numeric scrolls as Base, push = keypad Enter; Sim sends Ctrl+F13 / Ctrl+F14, push = Ctrl+F15.
+  scroll, push = right click; Symbol zoom (Ctrl+= / Ctrl+-), push = Ctrl+0; System volume,
+  push = mute; Numeric scrolls as Base, push = keypad Enter; Sim sends Ctrl+Alt+F13 /
+  Ctrl+Alt+F14 (monitor brightness through Twinkle Tray hotkeys), push = Ctrl+F15. Win+L moved
+  to System's left outer middle key.
 - Smooth scrolling is enabled on both keyboards at the same time (the TODO item).
 - Step 7's direction check is done on the device with the final bindings.
 - The encoder and joystick behaviours live in `eyelash_corne.keymap` (they are hardware-specific),

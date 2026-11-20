@@ -74,16 +74,18 @@ The shortcuts are for Windows, where this keyboard is mostly used (a sim rig).
 - **Outer columns:** on Base, the right column toggles the Sim layer (the same key turns it
   off), sends Alt+Tab once, and opens Explorer (Win+E). Move locks Base, Move or Numeric;
   Symbol has Game Bar capture keys; Numeric has `\` and two typed-text macros; System has
-  Windows tools (display mode, Settings, graphics-driver reset, Win+X, Alt+F4).
+  Windows tools (display mode, lock, Settings, graphics-driver reset, Win+X, Alt+F4).
 - **Joystick:** mouse movement on Base (press = left click, Shift + press = right click).
   On Move: down/up cycle windows like Alt+Tab, with Alt kept held; the press switches to the
   highlighted window, or opens Task View (Win+Tab) when not cycling; left/right switch virtual
   desktops. On Symbol: Win+arrows to snap, maximize and restore windows, press = snap layouts.
   On System: media keys. On Sim: arrow keys and Enter.
 - **Encoder:** one detent scrolls one notch. Vertical scroll on Base (push = middle click),
-  horizontal scroll on Move (push = right click), volume on Symbol (push = mute), brightness on
-  System (push = lock, Win+L). On Numeric the push is keypad Enter; on Sim the encoder sends
-  Ctrl+F13 / Ctrl+F14 and the push Ctrl+F15, for the sim to bind.
+  horizontal scroll on Move (push = right click), zoom on Symbol (Ctrl+= / Ctrl+-, push =
+  Ctrl+0), volume on System (push = mute). On Numeric the push is keypad Enter. On Sim the
+  encoder sends Ctrl+Alt+F13 / Ctrl+Alt+F14, meant as brightness hotkeys in
+  [Twinkle Tray](https://twinkletray.com/) (it changes an external monitor's brightness over
+  DDC/CI), and the push sends Ctrl+F15, for the sim to bind.
 - **Sim layer** (Eyelash only, index 5): the left half stays Base; the right half sends
   F13–F24 and keypad 1–5, keys meant to be bound in the sim or in SimHub.
 
