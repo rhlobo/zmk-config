@@ -74,6 +74,7 @@
   .enc { position: absolute; display: flex; align-items: center; justify-content: space-between; }
   .enc .side { width: 7.4mm; text-align: center; font-size: 5.4pt; font-weight: 700; line-height: 1.05; }
   .enc .side.big { font-size: 8.5pt; }
+  .enc .side b { display: block; font-size: 7pt; line-height: 1.05; }
   .enc .side i { display: block; font-style: normal; font-size: 8pt; color: var(--c); line-height: 1; }
   .enc .side.ghost, .enc .dial.ghost { opacity: .3; filter: grayscale(1); }
   .enc .dial {

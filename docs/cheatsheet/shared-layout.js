@@ -8,7 +8,7 @@
 //   'Q'                     tap legend
 //   'F hold:⌃'              tap F, hold Ctrl (drawn in the bar at the bottom of the key)
 //   ', shift:;'             top-right legend: what the key sends with Shift
-//   '← cap:mouse'           small caption at the top left
+//   '← cap:mouse'           small caption at the top left (on an encoder rotation: a line above the label)
 //   '⎋ hold:@num'           @<layer id> in hold: hold for that layer
 //   '@base cap:unlock'      @<layer id> as the tap: switch to (or toggle) that layer
 //   __                      &trans: falls through to Base (drawn faded, with the Base legend)

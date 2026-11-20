@@ -126,7 +126,8 @@ function renderSheet() {
     const side = (name, arrow) => {
       const [key, ghost] = part(name);
       const big = Array.from(key.tap).length <= 3 ? ' big' : '';
-      return `<div class="side${ghost}${big}"><i>${arrow}</i>${key.tap.split(' ').map(esc).join('<br>')}</div>`;
+      const cap = key.cap ? `<b>${esc(key.cap)}</b>` : '';
+      return `<div class="side${ghost}${big}"><i>${arrow}</i>${cap}${key.tap.split(' ').map(esc).join('<br>')}</div>`;
     };
     const [push, ghost] = part('push');
     return `<div class="enc" style="left:${mm(x0)};top:${mm(y0)};width:${mm(W - 2 * HALF - 1.6)}">`
